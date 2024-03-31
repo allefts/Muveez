@@ -2,25 +2,10 @@ import styled from "styled-components";
 import { DefaultAnchor } from "../../utils/DefaultStyles";
 import { FormEvent, useState } from "react";
 
-const StyledLogin = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, minmax(auto, 440px));
-  grid-template-rows: repeat(1, 500px);
-  gap: 4rem;
-`;
-
-const StyledLeftContent = styled.div`
-  border: 3px solid black;
-  padding: 1rem;
-`;
-
-const StyledRightContent = styled.div`
-  border: 3px solid black;
-  padding: 1rem;
-`;
-
 const StyledLoginForm = styled.form`
-  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledInput = styled.div`
@@ -46,7 +31,7 @@ const StyledInput = styled.div`
 `;
 
 const SubmitBtn = styled.button`
-  margin-top: 8rem;
+  margin-top: auto;
   padding: 0.5rem;
   width: 100%;
   background-color: transparent;
@@ -62,7 +47,11 @@ const SubmitBtn = styled.button`
   }
 `;
 
-const LoginForm = () => {
+const LoginForm = ({
+  changeForm,
+}: {
+  changeForm: (formTo: string) => void;
+}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -77,53 +66,43 @@ const LoginForm = () => {
   };
 
   return (
-    <StyledLogin>
-      <StyledLeftContent>
-        <h1>The days of forgetting your movie list are gone.</h1>
-        <p>Keep track of movies, shows and much more!</p>
-      </StyledLeftContent>
-      <StyledRightContent>
-        <h1>Log in to Muveez</h1>
-        <p>
-          Not a member?{"  "}
-          <DefaultAnchor $color="#EF4040" href="/register">
-            Sign up now
-          </DefaultAnchor>
-        </p>
-        <StyledLoginForm onSubmit={handleSubmit}>
+    <>
+      <h1>Log in to Muveez</h1>
+      <p>
+        Not a member?{"  "}
+        <DefaultAnchor $color="#EF4040" onClick={() => changeForm("Register")}>
+          Sign up now
+        </DefaultAnchor>
+      </p>
+      <StyledLoginForm onSubmit={handleSubmit}>
+        {/* <input name="bot-field" placeholder="do not fill this" hidden /> */}
+        <StyledInput>
+          <label htmlFor="username">Username</label>
           <input
-            name="bot-field"
-            placeholder="do not fill this"
-            type="hidden"
+            type="text"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            min={3}
+            max={9}
+            required
           />
-          <StyledInput>
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              min={3}
-              max={9}
-              required
-            />
-          </StyledInput>
-          <StyledInput>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              min={6}
-              max={18}
-            />
-          </StyledInput>
-          <SubmitBtn type="submit">Next</SubmitBtn>
-        </StyledLoginForm>
-      </StyledRightContent>
-    </StyledLogin>
+        </StyledInput>
+        <StyledInput>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            min={6}
+            max={18}
+            required
+          />
+        </StyledInput>
+        <SubmitBtn type="submit">Next</SubmitBtn>
+      </StyledLoginForm>
+    </>
   );
 };
 

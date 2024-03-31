@@ -5,6 +5,7 @@ import (
 
 	"github.com/allefts/muveez_server/internals/db"
 	"github.com/allefts/muveez_server/internals/routes"
+	"github.com/allefts/muveez_server/internals/services"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -19,17 +20,13 @@ func main() {
 	}))
 
 	//Initializing DB
-	err := db.ConnectDB("../internals/db/Muveez.db")
+	db, err := db.ConnectDB("../internals/db/Muveez.db")
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}
 
-	e.GET("/", func(c echo.Context) error {
-		fmt.Println("/ Endpoint")
-		return c.JSON(200, "Hello World")
-	})
+	userService := services.NewUserService(services.User{}, db)
 
 	routes.SetupRoutes(e)
-
 	e.Logger.Fatal(e.Start(":8000"))
 }

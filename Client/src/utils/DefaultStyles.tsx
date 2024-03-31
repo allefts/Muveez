@@ -5,6 +5,7 @@ export const DefaultAnchor = styled.a<{ $color: string }>`
   text-decoration: none;
   font-weight: bold;
   transition: all 300ms ease;
+  cursor: pointer;
 
   &:hover {
     text-decoration: underline;
