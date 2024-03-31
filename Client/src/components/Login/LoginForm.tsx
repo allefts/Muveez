@@ -36,6 +36,12 @@ const StyledInput = styled.div`
     font-size: 1rem;
     padding: 0.25rem;
     outline: none;
+    transition: all 300ms ease;
+    border: 1px solid black;
+
+    &:focus {
+      border: 1px solid #ef4040;
+    }
   }
 `;
 
@@ -60,8 +66,14 @@ const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    await fetch("http://localhost:8000/login", {
+      body: formData,
+      method: "POST",
+    });
   };
 
   return (
@@ -78,7 +90,12 @@ const LoginForm = () => {
             Sign up now
           </DefaultAnchor>
         </p>
-        <StyledLoginForm action="" onSubmit={handleSubmit}>
+        <StyledLoginForm onSubmit={handleSubmit}>
+          <input
+            name="bot-field"
+            placeholder="do not fill this"
+            type="hidden"
+          />
           <StyledInput>
             <label htmlFor="username">Username</label>
             <input
@@ -86,6 +103,8 @@ const LoginForm = () => {
               name="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              min={3}
+              max={9}
               required
             />
           </StyledInput>
@@ -97,6 +116,8 @@ const LoginForm = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              min={6}
+              max={18}
             />
           </StyledInput>
           <SubmitBtn type="submit">Next</SubmitBtn>
