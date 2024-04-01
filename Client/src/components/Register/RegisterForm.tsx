@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { DefaultAnchor } from "../../utils/DefaultStyles";
-import { FadeIn } from "../FadeIn";
+import React, { FormEvent, useState } from "react";
+import { validateInput } from "../../utils/ValidateUserInput";
+import { useFormErrors } from "../../utils/FormErrorHook";
 
 const StyledRegisterForm = styled.form`
   height: 100%;
@@ -52,6 +54,28 @@ const RegisterForm = ({
 }: {
   changeForm: (formTo: string) => void;
 }) => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    email: "",
+  });
+  const { errors, setError, clearError } = useFormErrors();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+
+    clearError(name);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const tempErrors = validateInput(formData);
+    for (const [key, val] of Object.entries(tempErrors)) {
+      setError(key, val);
+    }
+  };
+
   return (
     <>
       <h1>Join Muveez</h1>
@@ -61,19 +85,25 @@ const RegisterForm = ({
           Log in
         </DefaultAnchor>
       </p>
-      <StyledRegisterForm>
+      <StyledRegisterForm onSubmit={handleSubmit}>
         {/* <input name="bot-field" placeholder="do not fill this" hidden /> */}
         <StyledInput>
           <label htmlFor="username">Username</label>
-          <input type="text" name="username" required />
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+            required
+          />
         </StyledInput>
         <StyledInput>
           <label htmlFor="email">Email</label>
           <input
             type="email"
             name="email"
-            // value={username}
-            // onChange={(e) => setUsername(e.target.value)}
+            value={formData.email}
+            onChange={handleInputChange}
             required
           />
         </StyledInput>
@@ -82,13 +112,16 @@ const RegisterForm = ({
           <input
             type="password"
             name="password"
-            // value={password}
-            // onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={handleInputChange}
             min={6}
             max={18}
             required
           />
         </StyledInput>
+        {Object.entries(errors).map(([key, val], idx) => {
+          return <span key={idx}>{val}</span>;
+        })}
         <SubmitBtn type="submit">Next</SubmitBtn>
       </StyledRegisterForm>
     </>
