@@ -1,19 +1,34 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/allefts/muveez_server/internals/services"
 	"github.com/labstack/echo/v4"
 )
 
-func LoginHandler(c echo.Context) error {
-	// username := c.Request().FormValue("username")
+type AuthHandler struct {
+	AuthService *services.UserServices
+}
+
+func NewAuthHandler(userService *services.UserServices) *AuthHandler {
+	return &AuthHandler{AuthService: userService}
+}
+
+func (a *AuthHandler) LoginHandler(c echo.Context) error {
+	username := c.Request().FormValue("username")
 	// password := c.Request().FormValue("password")
+
+	user, err := a.AuthService.GetUserByUsername(username)
+
+	fmt.Println("User: ", user)
+	fmt.Println("Error: ", err)
 
 	return c.JSON(http.StatusOK, "Login Endpoint")
 }
 
-func RegisterHandle(c echo.Context) error {
+func (a *AuthHandler) RegisterHandler(c echo.Context) error {
 	// db := db.GetDB()
 
 	return c.JSON(http.StatusOK, "Register Endpoint")

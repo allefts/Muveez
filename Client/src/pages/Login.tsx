@@ -2,7 +2,7 @@ import styled from "styled-components";
 import LoginForm from "../components/Login/LoginForm";
 import { useState } from "react";
 import RegisterForm from "../components/Register/RegisterForm";
-import { FadeIn } from "../components/FadeIn";
+import { FadeIn } from "../utils/Keyframes";
 
 const StyledLoginPage = styled.div`
   height: 90vh;
@@ -13,7 +13,7 @@ const StyledLoginPage = styled.div`
   .loginPageContent {
     display: grid;
     grid-template-columns: repeat(2, minmax(auto, 440px));
-    grid-template-rows: repeat(1, 500px);
+    grid-template-rows: repeat(1, 550px);
     gap: 4rem;
   }
 `;

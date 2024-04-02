@@ -2,7 +2,10 @@ package services
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
+
+	"github.com/allefts/muveez_server/internals/utils"
 )
 
 type User struct {
@@ -26,6 +29,26 @@ func NewUserService(user User, db *sql.DB) *UserServices {
 	}
 }
 
-func (u *UserServices) CreateUser() {
+func (u *UserServices) CreateUser() error {
+	return nil
+}
 
+func (u *UserServices) GetUserByUsername(username string) (User, error) {
+	var user User
+	var tempTime string
+
+	row := u.Db.QueryRow("SELECT * FROM users WHERE username = ?", username)
+
+	tempErr := row.Err()
+	fmt.Println("Scan Error: ", tempErr)
+
+	err := row.Scan(&user.Id, &user.Username, &user.Password, &user.Email, &tempTime, &user.Num_Lists)
+
+	//No Found User
+	if err != nil {
+		return User{}, fmt.Errorf("no user found: %s", username)
+	}
+
+	user.Created_On = utils.TimeToYear(tempTime[:10])
+	return user, nil
 }

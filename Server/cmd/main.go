@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/allefts/muveez_server/internals/db"
+	"github.com/allefts/muveez_server/internals/handlers"
 	"github.com/allefts/muveez_server/internals/routes"
 	"github.com/allefts/muveez_server/internals/services"
 	"github.com/labstack/echo/v4"
@@ -26,7 +27,8 @@ func main() {
 	}
 
 	userService := services.NewUserService(services.User{}, db)
+	authHandler := handlers.NewAuthHandler(userService)
 
-	routes.SetupRoutes(e)
+	routes.SetupRoutes(e, authHandler)
 	e.Logger.Fatal(e.Start(":8000"))
 }

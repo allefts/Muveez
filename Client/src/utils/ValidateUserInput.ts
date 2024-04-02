@@ -24,16 +24,16 @@ export const validateInput = ({
 
   if (!usernameValid) {
     errors["username"] =
-      "Username must only contain alphanumeric characters (3-16)";
+      // "Username must only contain alphanumeric characters (3-16)";
+      "Invalid Username";
   }
 
   if (!passwordValid) {
-    errors["password"] =
-      "Password must have: a digit, a lowercase letter, a uppercase letter (> 8)";
+    errors["password"] = "Invalid Password";
   }
 
   if (!emailValid) {
-    errors["email"] = "Email must be valid";
+    errors["email"] = "Invalid Email";
   }
 
   return errors;

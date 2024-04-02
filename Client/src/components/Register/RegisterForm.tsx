@@ -3,6 +3,7 @@ import { DefaultAnchor } from "../../utils/DefaultStyles";
 import React, { FormEvent, useState } from "react";
 import { validateInput } from "../../utils/ValidateUserInput";
 import { useFormErrors } from "../../utils/FormErrorHook";
+import LineError from "../LineError";
 
 const StyledRegisterForm = styled.form`
   height: 100%;
@@ -119,8 +120,9 @@ const RegisterForm = ({
             required
           />
         </StyledInput>
-        {Object.entries(errors).map(([key, val], idx) => {
-          return <span key={idx}>{val}</span>;
+        <br />
+        {Object.entries(errors).map(([_, val], idx) => {
+          return <LineError key={idx + _} msg={val} />;
         })}
         <SubmitBtn type="submit">Next</SubmitBtn>
       </StyledRegisterForm>
