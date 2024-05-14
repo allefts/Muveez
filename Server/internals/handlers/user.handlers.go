@@ -32,9 +32,25 @@ func (a *AuthHandler) LoginHandler(c echo.Context) error {
 func (a *AuthHandler) RegisterHandler(c echo.Context) error {
 	u := &models.SignInCrendentials{}
 	if err := c.Bind(u); err != nil {
-		c.JSON(http.StatusBadRequest, "Error creating user")
+		return c.JSON(http.StatusBadRequest, "could not parse data")
 	}
-	// db := db.GetDB()
+
+	alreadyUser, _ := a.AuthService.GetUserByUsername(u.Username)
+
+	if alreadyUser.Username != "" && alreadyUser.Email != "" {
+		// User already exists
+		return c.JSON(http.StatusInternalServerError, "User already exists")
+	} else {
+		//Create User
+		a.AuthService.User.Email = u.Email
+		a.AuthService.User.Username = u.Username
+		a.AuthService.User.Password = u.Password
+
+		err := a.AuthService.CreateUser()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+	}
 
 	return c.JSON(http.StatusOK, "Register Endpoint")
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/allefts/muveez_server/internals/db"
 	"github.com/allefts/muveez_server/internals/handlers"
+	"github.com/allefts/muveez_server/internals/models"
 	"github.com/allefts/muveez_server/internals/routes"
 	"github.com/allefts/muveez_server/internals/services"
 	"github.com/labstack/echo/v4"
@@ -26,7 +27,7 @@ func main() {
 		fmt.Printf("Error: %s", err)
 	}
 
-	userService := services.NewUserService(services.User{}, db)
+	userService := services.NewUserService(models.User{}, db)
 	authHandler := handlers.NewAuthHandler(userService)
 
 	routes.SetupRoutes(e, authHandler)

@@ -76,14 +76,16 @@ const RegisterForm = ({
       setError(key, val);
     }
 
+    console.log(formData);
+
     if (noErrors() === true) {
       fetch("http://localhost:8000/register", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: { "Content-Type": "application/json" },
-      }).then((res) => {
-        res.json().then((res) => console.log(res));
-      });
+      }).then((res) => 
+        res.json().then((res) => console.log(res))
+      );
     }
   };
 
