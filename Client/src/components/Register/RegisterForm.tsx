@@ -60,7 +60,7 @@ const RegisterForm = ({
     password: "",
     email: "",
   });
-  const { errors, setError, clearError } = useFormErrors();
+  const { errors, setError, clearError, noErrors } = useFormErrors();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -74,6 +74,16 @@ const RegisterForm = ({
     const tempErrors = validateInput(formData);
     for (const [key, val] of Object.entries(tempErrors)) {
       setError(key, val);
+    }
+
+    if (noErrors() === true) {
+      fetch("http://localhost:8000/register", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+      }).then((res) => {
+        res.json().then((res) => console.log(res));
+      });
     }
   };
 

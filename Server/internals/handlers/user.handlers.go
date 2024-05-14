@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/allefts/muveez_server/internals/models"
 	"github.com/allefts/muveez_server/internals/services"
 	"github.com/labstack/echo/v4"
 )
@@ -29,6 +30,10 @@ func (a *AuthHandler) LoginHandler(c echo.Context) error {
 }
 
 func (a *AuthHandler) RegisterHandler(c echo.Context) error {
+	u := &models.SignInCrendentials{}
+	if err := c.Bind(u); err != nil {
+		c.JSON(http.StatusBadRequest, "Error creating user")
+	}
 	// db := db.GetDB()
 
 	return c.JSON(http.StatusOK, "Register Endpoint")

@@ -22,9 +22,11 @@ export const useFormErrors = () => {
     });
   };
 
+  const noErrors = () => Object.keys(errors).length === 0;
+
   //   const hasError = (field: string) => {
   //     return !!errors[field];
   //   };
 
-  return { errors, setError, clearError };
+  return { errors, setError, clearError, noErrors };
 };
