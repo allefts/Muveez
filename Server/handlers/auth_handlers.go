@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -26,13 +26,12 @@ func LoginWithGoogle(w http.ResponseWriter, r *http.Request) {
 func GoogleLoginCallback(w http.ResponseWriter, r *http.Request) {
 	if len(r.FormValue("state")) > 15 {
 		//State
-		_, err := GoogleOAuthConfig.Exchange(context.Background(), r.FormValue("code"), oauth2.AccessTypeOffline)
+		_, err := GoogleOAuthConfig.Exchange(r.Context(), r.FormValue("code"), oauth2.AccessTypeOffline)
 		if err != nil {
-			// log.Fatal(err)
-			fmt.Println(err)
+			log.Fatal(err)
 		}
 
-		// client := GoogleOAuthConfig.Client(context.Background(), tok)
+		// client := GoogleOAuthConfig.Client(r.Context(), tok)
 	} else {
 		//No State
 		http.Redirect(w, r, "http://localhost:5173", http.StatusPermanentRedirect)
