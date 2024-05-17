@@ -32,10 +32,4 @@ func main() {
 	//SERVER SETUP
 	server := api.NewAPIServer(store)
 	server.Serve()
-
-	//Middleware
-	// app.server.Use(middleware.Logger)
-	// app.server.Use(cors.Handler(cors.Options{
-	// 	AllowedOrigins: []string{"*", "http://localhost:5173", "http://localhost:8000"}, AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-	// }))
 }

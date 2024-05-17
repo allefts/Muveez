@@ -23,7 +23,7 @@ func NewAPIServer(store store.Store) *APIServer {
 func (s *APIServer) Serve() {
 	router := chi.NewRouter()
 
-	log.Info("Starting API Server on port " + s.port)
-
 	log.Fatal(http.ListenAndServe(s.port, router))
+
+	log.Info("Starting API Server on port " + s.port)
 }
