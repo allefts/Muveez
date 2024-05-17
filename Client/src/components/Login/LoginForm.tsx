@@ -58,11 +58,11 @@ const LoginForm = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
-    await fetch("http://localhost:8000/login", {
-      body: formData,
-      method: "POST",
-    });
+    // const formData = new FormData(e.currentTarget);
+    // await fetch("http://localhost:8000/login", {
+    //   body: formData,
+    //   method: "POST",
+    // });
   };
 
   return (
