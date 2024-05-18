@@ -40,13 +40,13 @@ func NewAuthHandler(s *store.Storage, a *AuthService) *AuthHandler {
 func (s *AuthHandler) RegisterRoutes(r *chi.Mux) {
 	r.Get("/auth/{provider}", s.handleProviderLogin)
 	r.Get("/auth/{provider}/callback", s.handleCallbackLogin)
-	r.Get("/auth/logout/provider", nil)
-	r.Get("/login", s.handleLogin)
+	r.Get("/logout/{provider}", s.handleLogout)
+	// r.Get("/login", s.handleLogin)
 }
 
-func (s *AuthHandler) handleLogin(w http.ResponseWriter, r *http.Request) {
+// func (s *AuthHandler) handleLogin(w http.ResponseWriter, r *http.Request) {
 
-}
+// }
 
 func (s *AuthHandler) handleProviderLogin(w http.ResponseWriter, r *http.Request) {
 	provider := chi.URLParam(r, "provider")
@@ -76,6 +76,16 @@ func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request
 		log.Fatal(err)
 		return
 	}
+
+	w.Header().Set("Location", "/")
+	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
+func (s *AuthHandler) handleLogout(w http.ResponseWriter, r *http.Request) {
+	provider := chi.URLParam(r, "provider")
+	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
+
+	gothic.Logout(w, r)
 
 	w.Header().Set("Location", "/")
 	w.WriteHeader(http.StatusTemporaryRedirect)
