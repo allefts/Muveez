@@ -13,7 +13,7 @@ type SQLiteStorage struct {
 	db *sql.DB
 }
 
-func NewSQLiteStorage(cfg config.Config) *SQLiteStorage {
+func NewSQLiteStorage(cfg *config.Config) *SQLiteStorage {
 	db, err := sql.Open("sqlite3", cfg.DBName)
 	if err != nil {
 		log.Fatal(err)

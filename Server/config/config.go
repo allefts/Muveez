@@ -12,8 +12,8 @@ type Config struct {
 	SupaSecret         string
 }
 
-func InitConfig() Config {
-	return Config{
+func InitConfig() *Config {
+	return &Config{
 		DBName:             getEnv("DB_NAME", "Muveez"),
 		DBSecret:           getEnv("DB_SECRET", "Secret"),
 		GoogleClientId:     getEnv("GOOGLE_CLIENT_ID", "google"),

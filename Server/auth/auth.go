@@ -20,11 +20,11 @@ type AuthService struct {
 }
 
 type AuthHandler struct {
-	store store.Store
+	store *store.Storage
 	auth  *AuthService
 }
 
-func NewAuthService(store sessions.Store) *AuthService {
+func NewAuthService(store *sessions.CookieStore) *AuthService {
 	gothic.Store = store
 
 	cfg := config.InitConfig()
@@ -33,7 +33,7 @@ func NewAuthService(store sessions.Store) *AuthService {
 	return &AuthService{}
 }
 
-func NewAuthHandler(s store.Store, a *AuthService) *AuthHandler {
+func NewAuthHandler(s *store.Storage, a *AuthService) *AuthHandler {
 	return &AuthHandler{store: s, auth: a}
 }
 
@@ -60,6 +60,9 @@ func (s *AuthHandler) handleProviderLogin(w http.ResponseWriter, r *http.Request
 }
 
 func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request) {
+	provider := chi.URLParam(r, "provider")
+	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
+
 	u, err := gothic.CompleteUserAuth(w, r)
 	if err != nil {
 		log.Fatal(err)
@@ -79,6 +82,9 @@ func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request
 }
 
 func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, user goth.User) error {
+	provider := chi.URLParam(r, "provider")
+	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
+
 	session, _ := gothic.Store.Get(r, SessionName)
 
 	err := session.Save(r, w)
