@@ -1,11 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Istok Web", "Metrophobic", "sans-serif";
-    line-height: 1.4
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Metrophobic", "Istok Web", "sans-serif";
+  line-height: 1.4;
 }

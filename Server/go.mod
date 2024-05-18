@@ -33,6 +33,8 @@ require (
 
 require (
 	github.com/charmbracelet/log v0.4.0
+	github.com/go-chi/chi v1.5.5
+	github.com/go-chi/cors v1.2.1
 	github.com/markbates/goth v1.79.0
 	github.com/mattn/go-sqlite3 v1.14.22
 )

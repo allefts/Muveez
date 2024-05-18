@@ -49,9 +49,11 @@ func (s *AuthHandler) handleProviderLogin(w http.ResponseWriter, r *http.Request
 	provider := chi.URLParam(r, "provider")
 	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
 
-	if _, err := gothic.CompleteUserAuth(w, r); err == nil {
-		log.Info("User is already authenticated!")
+	if u, err := gothic.CompleteUserAuth(w, r); err == nil {
+		log.Info("User is already authenticated! %v", u)
+		return
 	} else {
+		log.Info("Logging user in...")
 		gothic.BeginAuthHandler(w, r)
 	}
 }
@@ -76,7 +78,8 @@ func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	w.Header().Set("Location", "/")
+	//Redirect
+	w.Header().Set("Location", "http://localhost:5173")
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 
@@ -88,7 +91,8 @@ func (s *AuthHandler) handleLogout(w http.ResponseWriter, r *http.Request) {
 
 	gothic.Logout(w, r)
 
-	w.Header().Set("Location", "/")
+	//Redirect
+	w.Header().Set("Location", "http://localhost:5173")
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 

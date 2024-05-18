@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import LoginForm from "../components/Login/LoginForm";
-import { useState } from "react";
-import RegisterForm from "../components/Register/RegisterForm";
 import { FadeIn } from "../utils/Keyframes";
 
 const StyledLoginPage = styled.div`
@@ -13,7 +11,7 @@ const StyledLoginPage = styled.div`
   .loginPageContent {
     display: grid;
     grid-template-columns: repeat(2, minmax(auto, 440px));
-    grid-template-rows: repeat(1, 550px);
+    grid-template-rows: repeat(1, 300px);
     gap: 4rem;
   }
 `;
@@ -38,12 +36,6 @@ const StyledRightContent = styled.div`
 `;
 
 const LoginPage = () => {
-  const [currentAuthForm, setCurrentAuthForm] = useState<string>("Login");
-
-  const changeForm = (formTo: string) => {
-    setCurrentAuthForm(formTo);
-  };
-
   return (
     <StyledLoginPage>
       <div className="loginPageContent">
@@ -52,11 +44,7 @@ const LoginPage = () => {
           <p>Keep track of movies, shows and much more!</p>
         </StyledLeftContent>
         <StyledRightContent>
-          {currentAuthForm === "Login" ? (
-            <LoginForm changeForm={changeForm} />
-          ) : (
-            <RegisterForm changeForm={changeForm} />
-          )}
+          <LoginForm />
         </StyledRightContent>
       </div>
     </StyledLoginPage>

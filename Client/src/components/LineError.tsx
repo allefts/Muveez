@@ -1,4 +1,3 @@
-import { CloseCircleOutline } from "react-ionicons";
 import styled from "styled-components";
 import { SlideUp } from "../utils/Keyframes";
 
@@ -22,12 +21,6 @@ const StyledLineError = styled.div`
 const LineError = ({ msg }: { msg: string }) => {
   return (
     <StyledLineError>
-      <CloseCircleOutline
-        color={"#ef4040"}
-        width="25px"
-        height="25px"
-        cssClasses={"errorIcon"}
-      />
       <p>{msg}</p>
     </StyledLineError>
   );
