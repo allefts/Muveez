@@ -24,12 +24,15 @@ func main() {
 
 	//DB SETUP
 	sqlStorage := db.NewSQLiteStorage(cfg)
-	db, _ := sqlStorage.Init()
+	db, err := sqlStorage.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//STORE SETUP
 	store := store.NewStore(db)
 
 	//SERVER SETUP
-	server := api.NewAPIServer(store)
+	server := api.NewAPIServer(store, &cfg)
 	server.Serve()
 }

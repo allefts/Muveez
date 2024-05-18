@@ -9,6 +9,7 @@ type Config struct {
 	DBSecret           string
 	GoogleClientId     string
 	GoogleClientSecret string
+	SupaSecret         string
 }
 
 func InitConfig() Config {
@@ -17,6 +18,7 @@ func InitConfig() Config {
 		DBSecret:           getEnv("DB_SECRET", "Secret"),
 		GoogleClientId:     getEnv("GOOGLE_CLIENT_ID", "google"),
 		GoogleClientSecret: getEnv("GOOGLE_CLIENT_SECRET", "google"),
+		SupaSecret:         getEnv("SUPA_SECRET", "supasecret"),
 	}
 }
 

@@ -30,19 +30,83 @@ func NewSQLiteStorage(cfg config.Config) *SQLiteStorage {
 }
 
 func (s *SQLiteStorage) Init() (*sql.DB, error) {
+
+	if err := s.createUsersTable(); err != nil {
+		return nil, err
+	}
+
+	if err := s.createMoviesTable(); err != nil {
+		return nil, err
+	}
+
+	if err := s.createListsTable(); err != nil {
+		return nil, err
+	}
+
+	if err := s.createListMoviesTable(); err != nil {
+		return nil, err
+	}
+
+	return s.db, nil
+}
+
+// USERS
+func (s *SQLiteStorage) createUsersTable() error {
 	_, err := s.db.Exec(
 		`CREATE TABLE IF NOT EXISTS users (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			user_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			email VARCHAR(255) NOT NULL UNIQUE,
 			name VARCHAR(255) NOT NULL,
-			createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
 	)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	return err
+}
 
-	return s.db, nil
+// MOVIES
+func (s *SQLiteStorage) createMoviesTable() error {
+	_, err := s.db.Exec(
+		`CREATE TABLE IF NOT EXISTS movies (
+		movie_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		tmdb_id INTEGER NOT NULL,
+		title VARCHAR(255) NOT NULL,
+		release_date VARCHAR(55),
+		image_url VARCHAR(255)
+	);
+	`)
+
+	return err
+}
+
+// LISTS
+func (s *SQLiteStorage) createListsTable() error {
+	_, err := s.db.Exec(
+		`CREATE TABLE IF NOT EXISTS lists (
+		list_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		user_id INTEGER NOT NULL,
+		list_name VARCHAR(255) NOT NULL UNIQUE,
+		num_movies INTEGER DEFAULT 0,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	);
+	`)
+
+	return err
+}
+
+// LISTMOVIES
+func (s *SQLiteStorage) createListMoviesTable() error {
+	_, err := s.db.Exec(
+		`CREATE TABLE IF NOT EXISTS list_movies (
+		list_id INTEGER NOT NULL,
+		movie_id INTEGER NOT NULL,
+		
+		FOREIGN KEY (list_id) REFERENCES lists(list_id),
+		FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
+		PRIMARY KEY (list_id, movie_id)
+	);
+	`)
+
+	return err
 }
