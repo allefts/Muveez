@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/allefts/muveez_server/config"
@@ -26,7 +27,6 @@ type AuthHandler struct {
 
 func NewAuthService(store *sessions.CookieStore) *AuthService {
 	gothic.Store = store
-
 	cfg := config.InitConfig()
 	goth.UseProviders(google.New(cfg.GoogleClientId, cfg.GoogleClientSecret, "http://localhost:8000/auth/google/callback", "email", "profile"))
 
@@ -41,13 +41,10 @@ func (s *AuthHandler) RegisterRoutes(r *chi.Mux) {
 	r.Get("/auth/{provider}", s.handleProviderLogin)
 	r.Get("/auth/{provider}/callback", s.handleCallbackLogin)
 	r.Get("/logout/{provider}", s.handleLogout)
-	// r.Get("/login", s.handleLogin)
 }
 
-// func (s *AuthHandler) handleLogin(w http.ResponseWriter, r *http.Request) {
-
-// }
-
+// @Endpoint
+// User hits this when clicked on Login with Google
 func (s *AuthHandler) handleProviderLogin(w http.ResponseWriter, r *http.Request) {
 	provider := chi.URLParam(r, "provider")
 	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
@@ -59,6 +56,8 @@ func (s *AuthHandler) handleProviderLogin(w http.ResponseWriter, r *http.Request
 	}
 }
 
+// @Endpoint
+// After user follows Google login procedure
 func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request) {
 	provider := chi.URLParam(r, "provider")
 	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
@@ -81,6 +80,8 @@ func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 
+// @Endpoint
+// User hits the logout button
 func (s *AuthHandler) handleLogout(w http.ResponseWriter, r *http.Request) {
 	provider := chi.URLParam(r, "provider")
 	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
@@ -91,11 +92,13 @@ func (s *AuthHandler) handleLogout(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 
+// @Endpoint/Utility
+// Takes the request and reponse, retrieves the session and adds values needed into the session, saves session
 func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, user goth.User) error {
-	provider := chi.URLParam(r, "provider")
-	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
-
 	session, _ := gothic.Store.Get(r, SessionName)
+
+	//Set session values here
+	session.Values["name"] = user.Name
 
 	err := session.Save(r, w)
 	if err != nil {
@@ -104,4 +107,36 @@ func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, u
 	}
 
 	return nil
+}
+
+// @Utility
+// Checks if there is a session with a certain value attached to it
+func (s *AuthHandler) GetSessionUser(w http.ResponseWriter, r *http.Request) (goth.User, err) {
+	session, err := gothic.Store.Get(r, SessionName)
+	if err != nil {
+		return goth.User{}, err
+	}
+
+	u := session.Values["name"]
+	if u == nil {
+		return goth.User{}, fmt.Errorf("user is not authenticated! %v", u)
+	}
+
+	return u.(goth.User), nil
+
+}
+
+// @Middleware
+// Wraps an endpoint around an authentication barrier
+func RequireAuth(handlerFunc http.HandlerFunc, auth *AuthHandler) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, err := auth.GetSessionUser(w, r)
+		if err != nil {
+			log.Fatal(err)
+			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+			return
+		}
+
+		log.Info("User is authenticated! user: %v!", user.Name)
+	})
 }
