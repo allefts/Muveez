@@ -111,7 +111,7 @@ func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, u
 
 // @Utility
 // Checks if there is a session with a certain value attached to it
-func (s *AuthHandler) GetSessionUser(w http.ResponseWriter, r *http.Request) (goth.User, err) {
+func (s *AuthHandler) GetSessionUser(w http.ResponseWriter, r *http.Request) (goth.User, error) {
 	session, err := gothic.Store.Get(r, SessionName)
 	if err != nil {
 		return goth.User{}, err
