@@ -7,6 +7,7 @@ import (
 
 	"github.com/allefts/muveez_server/config"
 	"github.com/allefts/muveez_server/store"
+	"github.com/allefts/muveez_server/types"
 	"github.com/charmbracelet/log"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
@@ -48,6 +49,7 @@ func (s *AuthHandler) RegisterRoutes(r *chi.Mux) {
 func (s *AuthHandler) handleProviderLogin(w http.ResponseWriter, r *http.Request) {
 	provider := chi.URLParam(r, "provider")
 	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
+	log.Info(r.Context())
 
 	if u, err := gothic.CompleteUserAuth(w, r); err == nil {
 		log.Info("User is already authenticated! %v", u)
@@ -69,8 +71,6 @@ func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request
 		log.Fatal(err)
 		return
 	}
-
-	log.Info(u.Name)
 
 	err = s.StoreUserSession(w, r, u)
 	if err != nil {
@@ -101,8 +101,11 @@ func (s *AuthHandler) handleLogout(w http.ResponseWriter, r *http.Request) {
 func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, user goth.User) error {
 	session, _ := gothic.Store.Get(r, SessionName)
 
-	//Set session values here
+	//SESSION VALUES SET HERE
 	session.Values["name"] = user.Name
+	session.Values["email"] = user.Email
+	session.Values["avatarURL"] = user.AvatarURL
+	session.Values["userId"] = user.UserID
 
 	err := session.Save(r, w)
 	if err != nil {
@@ -115,18 +118,19 @@ func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, u
 
 // @Utility
 // Checks if there is a session with a certain value attached to it
-func (s *AuthHandler) GetSessionUser(w http.ResponseWriter, r *http.Request) (goth.User, error) {
+func (s *AuthHandler) GetSessionUser(w http.ResponseWriter, r *http.Request) (types.User, error) {
 	session, err := gothic.Store.Get(r, SessionName)
 	if err != nil {
-		return goth.User{}, err
+		return types.User{}, err
 	}
 
-	u := session.Values["name"]
-	if u == nil {
-		return goth.User{}, fmt.Errorf("user is not authenticated! %v", u)
+	name := session.Values["name"]
+	if name == nil {
+		return types.User{}, fmt.Errorf("user is not authenticated! %v", name)
 	}
 
-	return u.(goth.User), nil
+	u := types.User{Name: name.(string), Email: session.Values["email"].(string), UserId: session.Values["userId"].(string), AvatarURL: session.Values["avatarURL"].(string), CreatedAt: ""}
+	return u, nil
 
 }
 

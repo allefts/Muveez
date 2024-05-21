@@ -1,9 +1,10 @@
 package types
 
 type User struct {
-	UserId    uint32 `json:"user_id"`
+	UserId    string `json:"user_id"`
 	Email     string `json:"email"`
 	Name      string `json:"name"`
+	AvatarURL string `json:"avatarURL"`
 	CreatedAt string `json:"created_at"`
 }
 

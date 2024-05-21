@@ -5,6 +5,7 @@ import (
 
 	"github.com/allefts/muveez_server/auth"
 	"github.com/allefts/muveez_server/config"
+	"github.com/allefts/muveez_server/handlers"
 	"github.com/allefts/muveez_server/store"
 	"github.com/charmbracelet/log"
 	"github.com/go-chi/chi/v5"
@@ -29,6 +30,7 @@ func NewAPIServer(store *store.Storage, authService *auth.AuthService, cfg *conf
 
 func (s *APIServer) Serve() {
 	router := chi.NewRouter()
+	// currUser := &goth.User{}
 
 	//MIDDLEWARE
 	router.Use(cors.Handler(cors.Options{
@@ -43,6 +45,10 @@ func (s *APIServer) Serve() {
 	//AUTH SETUP
 	authHandler := auth.NewAuthHandler(s.store, s.authService)
 	authHandler.RegisterRoutes(router)
+
+	//USER SETUP
+	userService := handlers.NewUserService(s.store)
+	userService.RegisterRoutes(router)
 
 	log.Fatal(http.ListenAndServe(s.port, router))
 
