@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { DefaultAnchor } from "../../utils/DefaultStyles";
+import { DefaultAnchor } from "../../utils/styles/DefaultStyles";
 import React, { FormEvent, useState } from "react";
-import { validateInput } from "../../utils/ValidateUserInput";
-import { useFormErrors } from "../../utils/FormErrorHook";
+import { validateInput } from "../../utils/helpers/ValidateUserInput";
+import { useFormErrors } from "../../utils/helpers/FormErrorHook";
 import LineError from "../LineError";
 
 const StyledRegisterForm = styled.form`
@@ -83,9 +83,7 @@ const RegisterForm = ({
         method: "POST",
         body: JSON.stringify(formData),
         headers: { "Content-Type": "application/json" },
-      }).then((res) => 
-        res.json().then((res) => console.log(res))
-      );
+      }).then((res) => res.json().then((res) => console.log(res)));
     }
   };
 

@@ -38,7 +38,7 @@ func (s *APIServer) Serve() {
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: false,
+		AllowCredentials: true,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
@@ -50,7 +50,7 @@ func (s *APIServer) Serve() {
 	userService := handlers.NewUserService(s.store)
 	userService.RegisterRoutes(router, authHandler)
 
+	log.Info("Starting API Server on port " + s.port)
 	log.Fatal(http.ListenAndServe(s.port, router))
 
-	log.Info("Starting API Server on port " + s.port)
 }

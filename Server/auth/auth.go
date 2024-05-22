@@ -8,6 +8,7 @@ import (
 	"github.com/allefts/muveez_server/config"
 	"github.com/allefts/muveez_server/store"
 	"github.com/allefts/muveez_server/types"
+	"github.com/allefts/muveez_server/utils"
 	"github.com/charmbracelet/log"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
@@ -44,23 +45,22 @@ func (s *AuthHandler) RegisterRoutes(r *chi.Mux) {
 	r.Get("/logout/{provider}", s.handleLogout)
 }
 
-// @Endpoint
+//ENDPOINTS FOR AUTH
+
 // User hits this when clicked on Login with Google
 func (s *AuthHandler) handleProviderLogin(w http.ResponseWriter, r *http.Request) {
 	provider := chi.URLParam(r, "provider")
 	r = r.WithContext(context.WithValue(r.Context(), "provider", provider))
-	log.Info(r.Context())
 
 	if u, err := gothic.CompleteUserAuth(w, r); err == nil {
 		log.Info("User is already authenticated! %v", u)
 		return
 	} else {
-		log.Info("Logging user in...")
+		log.Info("Logging User In")
 		gothic.BeginAuthHandler(w, r)
 	}
 }
 
-// @Endpoint
 // After user follows Google login procedure
 func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request) {
 	provider := chi.URLParam(r, "provider")
@@ -83,7 +83,6 @@ func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 
-// @Endpoint
 // User hits the logout button
 func (s *AuthHandler) handleLogout(w http.ResponseWriter, r *http.Request) {
 	provider := chi.URLParam(r, "provider")
@@ -96,10 +95,19 @@ func (s *AuthHandler) handleLogout(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 
-// @Endpoint/Utility
 // Takes the request and reponse, retrieves the session and adds values needed into the session, saves session
 func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, user goth.User) error {
-	session, _ := gothic.Store.Get(r, SessionName)
+	session, err := gothic.Store.Get(r, SessionName)
+
+	if err != nil {
+		return err
+	}
+
+	//CREATE USER IF NOT ONE
+	if !s.store.IsThereUser(user.Email) {
+		log.Info("Creating New User")
+		s.store.CreateUser(user)
+	}
 
 	//SESSION VALUES SET HERE
 	session.Values["name"] = user.Name
@@ -107,44 +115,46 @@ func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, u
 	session.Values["avatarURL"] = user.AvatarURL
 	session.Values["userId"] = user.UserID
 
-	err := session.Save(r, w)
+	err = session.Save(r, w)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		// http.Error(w, err.Error(), http.StatusInternalServerError)
 		return err
 	}
 
 	return nil
 }
 
-// @Utility
-// Checks if there is a session with a certain value attached to it
-func (s *AuthHandler) GetSessionUser(w http.ResponseWriter, r *http.Request) (types.User, error) {
-	session, err := gothic.Store.Get(r, SessionName)
-	if err != nil {
-		return types.User{}, err
-	}
+//MIDDLEWARE FOR AUTH
 
-	name := session.Values["name"]
-	if name == nil {
-		return types.User{}, fmt.Errorf("user is not authenticated! %v", name)
-	}
-
-	u := types.User{Name: name.(string), Email: session.Values["email"].(string), GoogleID: session.Values["userId"].(string), AvatarURL: session.Values["avatarURL"].(string), CreatedAt: ""}
-	return u, nil
-
-}
-
-// @Middleware
 // Wraps an endpoint around an authentication barrier
 func RequireAuth(next http.HandlerFunc, auth *AuthHandler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user, err := auth.GetSessionUser(w, r)
+		_, err := auth.GetSessionUser(r)
 		if err != nil {
-			log.Info("User is not authenticated!")
+			log.Info(err)
+			utils.JSONResponse(w, types.Error{Message: "User Unauthorized"}, http.StatusForbidden)
+			return
 		}
-
-		log.Info("User is authenticated! user:", user.Name)
-
+		log.Info("Hit Auth Middleware")
 		next.ServeHTTP(w, r)
 	})
+}
+
+//UTILITY FOR AUTH
+
+// Checks if there is a session with a certain value attached to it
+func (s *AuthHandler) GetSessionUser(r *http.Request) (types.UserSession, error) {
+	session, err := gothic.Store.Get(r, SessionName)
+	if err != nil {
+		return types.UserSession{}, err
+	}
+
+	userId := session.Values["userId"]
+	name := session.Values["name"]
+	if userId == nil || name == nil || userId == "" || name == "" {
+		return types.UserSession{}, fmt.Errorf("user is not authenticated! %v", userId)
+	}
+
+	u := types.UserSession{Name: session.Values["name"].(string), Email: session.Values["email"].(string), GoogleID: session.Values["userId"].(string)}
+	return u, nil
 }

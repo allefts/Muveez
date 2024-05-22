@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { SlideUp } from "../utils/Keyframes";
+import { SlideUp } from "../utils/styles/Keyframes";
 
 const StyledLineError = styled.div`
   margin: 0.3rem 0;

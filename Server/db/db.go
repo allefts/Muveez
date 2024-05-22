@@ -58,6 +58,7 @@ func (s *SQLiteStorage) createUsersTable() error {
 			google_id VARCHAR(255) NOT NULL,
 			email VARCHAR(255) NOT NULL UNIQUE,
 			name VARCHAR(255) NOT NULL,
+			avatar_url VARCHAR(255) NOT NULL,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 		`,

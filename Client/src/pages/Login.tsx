@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import LoginForm from "../components/Login/LoginForm";
-import { FadeIn } from "../utils/Keyframes";
+import { FadeIn } from "../utils/styles/Keyframes";
 
 const StyledLoginPage = styled.div`
   height: 90vh;
