@@ -38,7 +38,7 @@ func (s *APIServer) Serve() {
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: true,
+		AllowCredentials: false,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
@@ -48,7 +48,7 @@ func (s *APIServer) Serve() {
 
 	//USER SETUP
 	userService := handlers.NewUserService(s.store)
-	userService.RegisterRoutes(router)
+	userService.RegisterRoutes(router, authHandler)
 
 	log.Fatal(http.ListenAndServe(s.port, router))
 

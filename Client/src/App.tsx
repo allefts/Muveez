@@ -4,7 +4,6 @@ import Page from "./pages/Page";
 function App() {
   const getUser = () => {
     fetch("http://localhost:8000/user", {
-      credentials: "include",
       method: "GET",
     })
       .then((res) => res.json())

@@ -129,22 +129,22 @@ func (s *AuthHandler) GetSessionUser(w http.ResponseWriter, r *http.Request) (ty
 		return types.User{}, fmt.Errorf("user is not authenticated! %v", name)
 	}
 
-	u := types.User{Name: name.(string), Email: session.Values["email"].(string), UserId: session.Values["userId"].(string), AvatarURL: session.Values["avatarURL"].(string), CreatedAt: ""}
+	u := types.User{Name: name.(string), Email: session.Values["email"].(string), GoogleID: session.Values["userId"].(string), AvatarURL: session.Values["avatarURL"].(string), CreatedAt: ""}
 	return u, nil
 
 }
 
 // @Middleware
 // Wraps an endpoint around an authentication barrier
-func RequireAuth(handlerFunc http.HandlerFunc, auth *AuthHandler) http.HandlerFunc {
+func RequireAuth(next http.HandlerFunc, auth *AuthHandler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, err := auth.GetSessionUser(w, r)
 		if err != nil {
-			log.Fatal(err)
-			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
-			return
+			log.Info("User is not authenticated!")
 		}
 
-		log.Info("User is authenticated! user: %v!", user.Name)
+		log.Info("User is authenticated! user:", user.Name)
+
+		next.ServeHTTP(w, r)
 	})
 }

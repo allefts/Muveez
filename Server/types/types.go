@@ -1,7 +1,7 @@
 package types
 
 type User struct {
-	UserId    string `json:"user_id"`
+	GoogleID  string `json:"google_id"`
 	Email     string `json:"email"`
 	Name      string `json:"name"`
 	AvatarURL string `json:"avatarURL"`

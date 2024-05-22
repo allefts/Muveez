@@ -20,8 +20,8 @@ func NewUserService(store *store.Storage) *UsersService {
 	}
 }
 
-func (s *UsersService) RegisterRoutes(r *chi.Mux) {
-	r.Get("/user", s.GetUser)
+func (s *UsersService) RegisterRoutes(r *chi.Mux, authHandler *auth.AuthHandler) {
+	r.Get("/user", auth.RequireAuth(s.GetUser, authHandler))
 }
 
 func (s *UsersService) GetUser(w http.ResponseWriter, r *http.Request) {
