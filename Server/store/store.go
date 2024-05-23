@@ -20,6 +20,9 @@ func NewStore(db *sql.DB) *Storage {
 
 type Store interface {
 	//Methods that hit db, basically just SQL queries
+	GetUser(email string) (*types.User, error)
+	IsThereUser(email string) bool
+	CreateUser(user goth.User)
 }
 
 func (s *Storage) GetUser(email string) (*types.User, error) {
