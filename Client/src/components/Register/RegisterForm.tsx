@@ -76,8 +76,6 @@ const RegisterForm = ({
       setError(key, val);
     }
 
-    console.log(formData);
-
     if (noErrors() === true) {
       fetch("http://localhost:8000/register", {
         method: "POST",

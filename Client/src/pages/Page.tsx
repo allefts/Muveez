@@ -1,48 +1,27 @@
-import {
-  RouteObject,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
+// import { useContext } from "react";
+// import { AuthContext } from "../atoms/AuthProvider";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ErrorPage from "./Error";
 import LandingPage from "./Landing";
 import LoginPage from "./Login";
-import ErrorPage from "./Error";
-import { useContext, useMemo } from "react";
-import { AuthContext } from "../atoms/AuthProvider";
-import ListPage from "./Lists";
-import ProfilePage from "./Profile";
+// import { useContext } from "react";
+// import { AuthContext } from "../atoms/AuthProvider";
 
 const Page = () => {
-  const { authState } = useContext(AuthContext);
-
-  const availableRoutes = useMemo(() => {
-    const publicRoutes: RouteObject[] = [
-      { path: "/login", element: <LoginPage />, errorElement: <ErrorPage /> },
-    ];
-    const privateRoutes: RouteObject[] = [
-      { path: "/lists", element: <ListPage />, errorElement: <ErrorPage /> },
-      {
-        path: "/profile",
-        element: <ProfilePage />,
-        errorElement: <ErrorPage />,
-      },
-    ];
-
-    const bothRoutes: RouteObject[] = [
-      {
-        path: "/",
-        element: <LandingPage />,
-        errorElement: <ErrorPage />,
-      },
-    ];
-
-    return bothRoutes.concat(authState.isAuthed ? privateRoutes : publicRoutes);
-  }, [authState]);
-
-  const router = createBrowserRouter(availableRoutes);
+  // const { authState } = useContext(AuthContext);
 
   return (
     <main>
-      <RouterProvider router={router} />
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<LandingPage />} errorElement={<ErrorPage />} />
+          <Route
+            path="/login"
+            element={<LoginPage />}
+            errorElement={<ErrorPage />}
+          />
+        </Routes>
+      </BrowserRouter>
     </main>
   );
 };
