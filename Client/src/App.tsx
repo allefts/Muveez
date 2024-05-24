@@ -1,3 +1,4 @@
+import Footer from "./components/Footer/Footer";
 import Nav from "./components/Navbar/Nav";
 import Page from "./pages/Page";
 
@@ -6,7 +7,7 @@ function App() {
     <>
       <Nav />
       <Page />
-      <footer></footer>
+      <Footer />
     </>
   );
 }
