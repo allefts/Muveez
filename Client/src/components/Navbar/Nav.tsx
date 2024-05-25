@@ -1,22 +1,28 @@
+import styled from "styled-components";
+import { Link } from "wouter";
+import NavItems from "./NavItems";
+
+const StyledNav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+
+  .home_link {
+    font-size: 2rem;
+  }
+`;
+
 const Nav = () => {
   return (
-    <nav className="">
-      <div>
-        <h1>
-          <a href="/" className="">
-            Muveez
-          </a>
-        </h1>
-      </div>
-      <div>
-        <p>
-          <a className="" href="/login">
-            Login
-          </a>
-        </p>
-        <p></p>
-      </div>
-    </nav>
+    <StyledNav className="">
+      <Link className="home_link" to="/">
+        Muveez
+      </Link>
+      <NavItems />
+    </StyledNav>
   );
 };
 

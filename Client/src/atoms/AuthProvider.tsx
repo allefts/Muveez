@@ -1,17 +1,6 @@
 import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
 import { fetchCurrentUser } from "../utils/helpers/Fetcher";
-import { UserData } from "../utils/types";
-
-//AUTH CONTEXT TYPES
-type AuthState = {
-  isAuthed: boolean;
-  user: UserData | null;
-};
-
-type AuthContextType = {
-  authState: AuthState;
-  setAuthState: (newAuthState: AuthState) => void;
-};
+import { AuthContextType, UserData } from "../utils/types";
 
 const initialState: AuthContextType = {
   authState: {
@@ -30,11 +19,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const getAuthStatus = async () => {
       const user: UserData | string = await fetchCurrentUser();
       if (typeof user == "string") {
-        console.log("Signed Out");
+        localStorage.removeItem("user");
         setAuthState({ isAuthed: false, user: null });
+        console.log("Signed Out");
       } else {
-        console.log("Signed In");
+        localStorage.setItem("user", "1");
         setAuthState({ isAuthed: true, user: user });
+        console.log("Signed In");
       }
     };
 

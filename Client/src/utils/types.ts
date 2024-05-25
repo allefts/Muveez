@@ -7,4 +7,15 @@ type UserData = {
   createdAt: string;
 };
 
-export type { UserData };
+//AUTH CONTEXT TYPES
+type AuthState = {
+  isAuthed: boolean;
+  user: UserData | null;
+};
+
+type AuthContextType = {
+  authState: AuthState;
+  setAuthState: (newAuthState: AuthState) => void;
+};
+
+export type { AuthState, AuthContextType, UserData };
