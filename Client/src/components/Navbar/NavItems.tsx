@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { Link } from "wouter";
 import { AuthContext } from "../../atoms/AuthProvider";
+import { BsBrightnessHigh, BsMoon } from "react-icons/bs";
+
 import styled from "styled-components";
 
 const StyledNavItems = styled.div`
@@ -19,7 +21,13 @@ const StyledNavItems = styled.div`
   }
 `;
 
-const NavItems = () => {
+const NavItems = ({
+  theme,
+  toggleTheme,
+}: {
+  theme: string;
+  toggleTheme: () => void;
+}) => {
   const { authState } = useContext(AuthContext);
 
   if (authState.user)
@@ -31,10 +39,49 @@ const NavItems = () => {
         <Link to="/profile">
           <img className="profile_image" src={authState.user.avatarURL} />
         </Link>
+        <ThemeSelector theme={theme} toggleTheme={toggleTheme} />
       </StyledNavItems>
     );
 
-  return <Link to="/login">Login</Link>;
+  return (
+    <Link className="lists_link" to="/login" replace>
+      Login
+    </Link>
+  );
+};
+
+const StyledThemeSelector = styled.div`
+  display: flex;
+  alignitems: center;
+  padding: 0.25rem;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.6;
+  color: ${({ theme }) => theme.primary};
+
+  transition: all 300ms ease;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const ThemeSelector = ({
+  theme,
+  toggleTheme,
+}: {
+  theme: string;
+  toggleTheme: () => void;
+}) => {
+  return (
+    <StyledThemeSelector onClick={toggleTheme}>
+      {theme === "dark" ? (
+        <BsBrightnessHigh title="Bright Theme" size="1.25rem" />
+      ) : (
+        <BsMoon title="Dark Theme" size="1.25rem" />
+      )}
+    </StyledThemeSelector>
+  );
 };
 
 export default NavItems;
