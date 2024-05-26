@@ -50,6 +50,10 @@ func (s *APIServer) Serve() {
 	userService := handlers.NewUserService(s.store)
 	userService.RegisterRoutes(router, authHandler)
 
+	//LIST SETUP
+	listService := handlers.NewListsService(s.store)
+	listService.RegisterRoutes(router, authHandler)
+
 	log.Info("Starting API Server on port " + s.port)
 	log.Fatal(http.ListenAndServe(s.port, router))
 

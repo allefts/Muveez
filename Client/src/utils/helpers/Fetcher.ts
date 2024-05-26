@@ -5,8 +5,9 @@ const fetchCurrentUser = async () => {
   const currUser: UserData = {
     userId: 0,
     googleId: "",
-    name: "",
     email: "",
+    username: "",
+    name: "",
     createdAt: "",
     avatarURL: "",
   };
@@ -22,6 +23,7 @@ const fetchCurrentUser = async () => {
       currUser.userId = parseInt(data.user_id);
       currUser.googleId = data.google_id;
       currUser.name = data.name;
+      currUser.username = data.username;
       currUser.email = data.email;
       currUser.avatarURL = data.avatar_url;
       currUser.createdAt = data.created_at;
@@ -35,4 +37,14 @@ const fetchCurrentUser = async () => {
   }
 };
 
-export { fetchCurrentUser };
+const fetchUserLists = async () => {
+  try {
+    const res = await fetch("http://localhost:8000/user/lists");
+    const data = await res.json();
+    console.log(data);
+  } catch (err) {
+    return err;
+  }
+};
+
+export { fetchUserLists, fetchCurrentUser };

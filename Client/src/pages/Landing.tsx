@@ -1,8 +1,14 @@
+import styled from "styled-components";
+
+const StyledLandingPage = styled.div`
+  padding: 0 2rem;
+`;
+
 const LandingPage = () => {
   return (
-    <div>
+    <StyledLandingPage>
       <h1>Home Page</h1>
-    </div>
+    </StyledLandingPage>
   );
 };
 

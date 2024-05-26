@@ -3,8 +3,9 @@ package types
 import "time"
 
 type User struct {
-	UserId    int       `json:"user_id"`
+	UserID    int       `json:"user_id"`
 	GoogleID  string    `json:"google_id"`
+	UserName  string    `json:"username"`
 	Email     string    `json:"email"`
 	Name      string    `json:"name"`
 	AvatarURL string    `json:"avatar_url"`
@@ -18,22 +19,25 @@ type UserSession struct {
 }
 
 type List struct {
-	ListName  string  `json:"list_name"`
-	NumMovies uint32  `json:"num_movies"`
-	Movies    []Movie `json:"movies"`
+	ListID    int       `json:"list_id"`
+	UserID    int       `json:"user_id"`
+	ListName  string    `json:"list_name"`
+	CreatedAt time.Time `json:"create_at"`
+	// NumMovies int       `json:"num_movies"`
+	// Movies    []Movie
 }
 
 type Movie struct {
-	MovieId     uint32 `json:"movie_id"`
-	TmdbId      int32  `json:"tmdb_id"`
+	MovieId     int    `json:"movie_id"`
+	TmdbId      int    `json:"tmdb_id"`
 	Title       string `json:"title"`
 	ReleaseDate string `json:"release_date"`
 	ImageURL    string `json:"image_url"`
 }
 
 type ListMovie struct {
-	ListId  int32 `json:"list_id"`
-	MovieId int32 `json:"movie_id"`
+	ListId  int `json:"list_id"`
+	MovieId int `json:"movie_id"`
 }
 
 type Error struct {

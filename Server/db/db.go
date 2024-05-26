@@ -57,6 +57,7 @@ func (s *SQLiteStorage) createUsersTable() error {
 			user_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			google_id VARCHAR(255) NOT NULL,
 			email VARCHAR(255) NOT NULL UNIQUE,
+			username VARCHAR(255) UNIQUE,
 			name VARCHAR(255) NOT NULL,
 			avatar_url VARCHAR(255) NOT NULL,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -89,7 +90,6 @@ func (s *SQLiteStorage) createListsTable() error {
 		list_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_id INTEGER NOT NULL,
 		list_name VARCHAR(255) NOT NULL UNIQUE,
-		num_movies INTEGER DEFAULT 0,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);
 	`)

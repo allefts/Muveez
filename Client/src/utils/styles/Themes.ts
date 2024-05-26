@@ -38,5 +38,15 @@ export const GlobalStyle = createGlobalStyle`
     &:hover {
       text-decoration: underline;
     }
+
+  }
+
+  input {
+    outline: none;
+    border: 2px solid ${({ theme }) => theme.text};
+    border-radius: .5rem;
+    padding: 0.5rem 1rem;
+    background: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
   }
 `;
