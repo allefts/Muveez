@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
-import { fetchCurrentUser } from "../utils/helpers/Fetcher";
 import { AuthContextType, UserData } from "../utils/types";
+import { fetchCurrentUser } from "../utils/helpers/fetcher";
 
 const initialState: AuthContextType = {
   authState: {
@@ -18,6 +18,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const getAuthStatus = async () => {
       const user: UserData | string = await fetchCurrentUser();
+
       if (typeof user == "string") {
         localStorage.removeItem("user");
         setAuthState({ isAuthed: false, user: null });

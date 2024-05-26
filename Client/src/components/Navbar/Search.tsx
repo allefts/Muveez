@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { BsSearch } from "react-icons/bs";
+// import { useState } from "react";
 
 const StyledSearchBar = styled.div`
   display: flex;
@@ -42,11 +43,11 @@ const StyledSearchBar = styled.div`
 `;
 
 const SearchBar = ({ placeholder = "Search..." }) => {
-  // const [query, setQuery] = React.useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
 
   // const handleChange = (e) => {
   //   e.preventDefault();
-  //   setQuery(e.target.value);
+  //   setSearchQuery(e.target.value);
   // };
 
   // const handleSearch = () => {
@@ -60,7 +61,7 @@ const SearchBar = ({ placeholder = "Search..." }) => {
       <input
         className="search_inpt"
         type="text"
-        // value={query}
+        // value={searchQuery}
         // onChange={handleChange}
         placeholder={placeholder}
       />

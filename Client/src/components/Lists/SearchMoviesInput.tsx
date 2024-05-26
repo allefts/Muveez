@@ -1,9 +1,18 @@
 import styled from "styled-components";
+import SearchInput from "./SearchInput";
+// import { useState } from "react";
 
-const StyledSearchMoviesInput = styled.input``;
+const StyledSearchMovies = styled.div``;
 
 const SearchMoviesInput = () => {
-  return <StyledSearchMoviesInput />;
+  // const [searchValue, setSearchValue] = useState("");
+
+  return (
+    <StyledSearchMovies>
+      <SearchInput placeholder="Movies" />
+      <div></div>
+    </StyledSearchMovies>
+  );
 };
 
 export default SearchMoviesInput;

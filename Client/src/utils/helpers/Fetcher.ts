@@ -1,37 +1,43 @@
-import { UserData } from "../types";
+import axios from "axios";
+import { toUser } from "./toUser";
+
+const serverAPI = axios.create({
+  baseURL: "http://localhost:8000",
+  responseType: "json",
+  responseEncoding: "utf8",
+  withCredentials: true,
+});
+
+// const movieAPI = axios.create({
+//   baseURL: "https://api.themoviedb.org/3",
+//   responseType: "json",
+//   responseEncoding: "utf8",
+//   withCredentials: true,
+//   headers: { Authorization: "Bearer" + "" },
+// });
+
+const serverFetcher = async (url: string) => {
+  const res = await serverAPI.get(url);
+
+  if (res.status !== 200) {
+    return Error("Unable to fetch");
+  }
+  return res.data;
+};
 
 //Gets user from user-session cookie
 const fetchCurrentUser = async () => {
-  const currUser: UserData = {
-    userId: 0,
-    googleId: "",
-    email: "",
-    username: "",
-    name: "",
-    createdAt: "",
-    avatarURL: "",
-  };
-
   try {
-    const res = await fetch("http://localhost:8000/user", {
-      method: "GET",
-      credentials: "include",
+    const res = await serverAPI.request({
+      url: "/user",
+      method: "get",
     });
-    const data = await res.json();
 
-    if (data.email && data.name) {
-      currUser.userId = parseInt(data.user_id);
-      currUser.googleId = data.google_id;
-      currUser.name = data.name;
-      currUser.username = data.username;
-      currUser.email = data.email;
-      currUser.avatarURL = data.avatar_url;
-      currUser.createdAt = data.created_at;
-
-      return currUser;
-    } else {
+    if (res.status !== 200) {
       return "Error";
     }
+
+    return toUser(res.data);
   } catch (err) {
     return "Error";
   }
@@ -39,12 +45,15 @@ const fetchCurrentUser = async () => {
 
 const fetchUserLists = async () => {
   try {
-    const res = await fetch("http://localhost:8000/user/lists");
-    const data = await res.json();
-    console.log(data);
+    const res = await serverAPI.request({ url: "/user/lists", method: "get" });
+    if (res.status !== 200) {
+      return "Error";
+    }
+
+    console.log("User Lists: ", res);
   } catch (err) {
-    return err;
+    return "Error";
   }
 };
 
-export { fetchUserLists, fetchCurrentUser };
+export { serverFetcher, fetchUserLists, fetchCurrentUser };
