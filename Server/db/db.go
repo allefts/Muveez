@@ -75,6 +75,7 @@ func (s *SQLiteStorage) createMoviesTable() error {
 		movie_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		tmdb_id INTEGER NOT NULL,
 		title VARCHAR(255) NOT NULL,
+		overview VARCHAR(255) NOT NULL,
 		release_date VARCHAR(55),
 		image_url VARCHAR(255)
 	);
