@@ -3,6 +3,7 @@ import LandingPage from "./Landing";
 import LoginPage from "./Login";
 import ListPage from "./Lists";
 import ProfilePage from "./Profile";
+import ProtectedPage from "./Protected";
 
 const Page = () => {
   return (
@@ -12,8 +13,10 @@ const Page = () => {
       <Route path="/login" component={LoginPage} />
 
       {/* PRIVATE */}
-      <Route path="/lists" component={ListPage} />
-      <Route path="/profile" component={ProfilePage} />
+      <ProtectedPage>
+        <Route path="/lists" component={ListPage} />
+        <Route path="/profile" component={ProfilePage} />
+      </ProtectedPage>
     </Switch>
   );
 };

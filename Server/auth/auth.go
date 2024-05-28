@@ -113,7 +113,7 @@ func (s *AuthHandler) StoreUserSession(w http.ResponseWriter, r *http.Request, u
 	session.Values["name"] = user.Name
 	session.Values["email"] = user.Email
 	session.Values["avatarURL"] = user.AvatarURL
-	session.Values["userId"] = user.UserID
+	session.Values["googleID"] = user.UserID
 
 	err = session.Save(r, w)
 	if err != nil {
@@ -149,12 +149,12 @@ func (s *AuthHandler) GetSessionUser(r *http.Request) (types.UserSession, error)
 		return types.UserSession{}, err
 	}
 
-	userId := session.Values["userId"]
+	googleID := session.Values["googleID"]
 	name := session.Values["name"]
-	if userId == nil || name == nil || userId == "" || name == "" {
-		return types.UserSession{}, fmt.Errorf("user is not authenticated! %v", userId)
+	if googleID == nil || name == nil || googleID == "" || name == "" {
+		return types.UserSession{}, fmt.Errorf("user is not authenticated! %v", googleID)
 	}
 
-	u := types.UserSession{Name: session.Values["name"].(string), Email: session.Values["email"].(string), GoogleID: session.Values["userId"].(string)}
+	u := types.UserSession{Name: session.Values["name"].(string), Email: session.Values["email"].(string), GoogleID: session.Values["googleID"].(string)}
 	return u, nil
 }

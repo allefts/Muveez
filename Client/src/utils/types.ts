@@ -8,15 +8,4 @@ type UserData = {
   createdAt: string;
 };
 
-//AUTH CONTEXT TYPES
-type AuthState = {
-  isAuthed: boolean;
-  user: UserData | null;
-};
-
-type AuthContextType = {
-  authState: AuthState;
-  setAuthState: (newAuthState: AuthState) => void;
-};
-
-export type { AuthState, AuthContextType, UserData };
+export type { UserData };

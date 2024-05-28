@@ -21,23 +21,22 @@ const StyledNavItems = styled.div`
   }
 `;
 
-const NavItems = ({
-  theme,
-  toggleTheme,
-}: {
+type NavItemProps = {
   theme: string;
   toggleTheme: () => void;
-}) => {
-  const { authState } = useContext(AuthContext);
+};
 
-  if (authState.user)
+const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
+  const { user } = useContext(AuthContext);
+
+  if (user)
     return (
       <StyledNavItems>
         <Link className="lists_link" to="/lists">
           Lists
         </Link>
         <Link to="/profile">
-          <img className="profile_image" src={authState.user.avatarURL} />
+          <img className="profile_image" src={user.avatarURL} />
         </Link>
         <ThemeSelector theme={theme} toggleTheme={toggleTheme} />
       </StyledNavItems>

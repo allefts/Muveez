@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { AuthContext } from "../context/AuthProvider";
 import EditForm from "../components/Profile/EditForm";
@@ -27,14 +27,20 @@ const StyledUserInfo = styled.div`
 `;
 
 const ProfilePage = () => {
-  const { authState } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+  const [username, setUsername] = useState(user?.username);
+
+  const handleUpdateUsername = () => {
+    //Send Request to update username
+    console.log(username);
+  };
 
   return (
     <StyledProfilePage>
       <StyledUserInfo>
-        <img src={authState.user?.avatarURL} alt="Profile" />
-        <h3>{authState.user?.email}</h3>
-        <h3>{authState.user?.createdAt}</h3>
+        <img src={user?.avatarURL} alt="Profile" />
+        <h3>{user?.email}</h3>
+        <h3>{user?.createdAt}</h3>
       </StyledUserInfo>
       <EditForm>
         <label htmlFor="username"></label>
@@ -43,6 +49,13 @@ const ProfilePage = () => {
           id="username"
           name="username"
           placeholder="Username"
+          onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleUpdateUsername();
+            }
+          }}
         />
       </EditForm>
     </StyledProfilePage>

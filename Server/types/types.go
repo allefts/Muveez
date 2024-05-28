@@ -18,13 +18,19 @@ type UserSession struct {
 	Email    string `json:"email"`
 }
 
+type DBList struct {
+	ListID    int       `json:"list_id"`
+	UserID    int       `json:"user_id"`
+	ListName  string    `json:"list_name"`
+	CreatedAt time.Time `json:"create_at"`
+}
+
 type List struct {
 	ListID    int       `json:"list_id"`
 	UserID    int       `json:"user_id"`
 	ListName  string    `json:"list_name"`
 	CreatedAt time.Time `json:"create_at"`
-	// NumMovies int       `json:"num_movies"`
-	// Movies    []Movie
+	Movies    []Movie   `json:"movies"`
 }
 
 type Movie struct {

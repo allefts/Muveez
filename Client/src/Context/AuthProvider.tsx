@@ -1,42 +1,29 @@
-import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
-import { AuthContextType, UserData } from "../utils/types";
-import { fetchCurrentUser } from "../utils/helpers/fetcher";
+import { ReactNode, createContext, useMemo } from "react";
+import { UserData } from "../utils/types";
+import { useUser } from "../utils/helpers/serverFetcher";
 
-const initialState: AuthContextType = {
-  authState: {
-    isAuthed: false,
-    user: null,
-  },
-  setAuthState: () => {},
+type ContextType = {
+  user: UserData | null;
 };
 
-const AuthContext = createContext<AuthContextType>(initialState);
+const AuthContext = createContext<ContextType>({ user: null });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [authState, setAuthState] = useState(initialState.authState);
+  const { user, isLoading, isError } = useUser();
 
-  useEffect(() => {
-    const getAuthStatus = async () => {
-      const user: UserData | string = await fetchCurrentUser();
+  if (isLoading) {
+    console.log("Loading Context...");
+  }
 
-      if (typeof user == "string") {
-        localStorage.removeItem("user");
-        setAuthState({ isAuthed: false, user: null });
-        console.log("Signed Out");
-      } else {
-        localStorage.setItem("user", "1");
-        setAuthState({ isAuthed: true, user: user });
-        console.log("Signed In");
-      }
-    };
+  if (isError) {
+    console.log("Error in Context!");
+  }
 
-    getAuthStatus();
-  }, []);
+  if (user) {
+    console.log("User Loaded!");
+  }
 
-  const value = useMemo(
-    () => ({ authState, setAuthState }),
-    [authState, setAuthState]
-  );
+  const value = useMemo(() => ({ user }), [user]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -22,12 +22,37 @@ type Store interface {
 	//Methods that hit db, basically just SQL queries
 
 	//USER QUERIES
-	GetUser(email string) (*types.User, error)
+	GetUser(email string) (types.User, error)
+	GetUserIDFromEmail(email string) (int, error)
 	IsThereUser(email string) bool
 	CreateUser(user goth.User)
 
 	//LIST_MOVIES QUERIES
 	GetUserLists(userId string) ([]types.List, error)
+}
+
+// userID is stored only on db, googleID comes from OAuth, need to query userID...
+func (s *Storage) GetUserIDFromEmail(email string) (int, error) {
+	row, err := s.db.Query("SELECT user_id FROM users WHERE email = ? LIMIT 1", email)
+	if err != nil {
+		return 0, err
+	}
+
+	defer row.Close()
+
+	if !row.Next() {
+		return 0, fmt.Errorf("no user found")
+	}
+
+	var userID int
+
+	err = row.Scan(&userID)
+	if err != nil {
+		return 0, err
+	}
+
+	return userID, nil
+
 }
 
 func (s *Storage) GetUser(email string) (types.User, error) {
@@ -66,21 +91,22 @@ func (s *Storage) CreateUser(user goth.User) error {
 	return nil
 }
 
-func (s *Storage) GetUserLists(userId int) ([]types.List, error) {
-	rows, err := s.db.Query("SELECT * FROM lists where user_id = ?", userId)
+func (s *Storage) GetUserLists(userID int) ([]types.DBList, error) {
+	rows, err := s.db.Query("SELECT * FROM lists where user_id = ?", userID)
 	if err != nil {
 		return nil, err
 	}
 
 	defer rows.Close()
 
-	var lists []types.List
+	var lists []types.DBList
 	for rows.Next() {
-		var list types.List
+		var list types.DBList
 		if err := rows.Scan(&list.ListID, &list.UserID, &list.ListName, &list.CreatedAt); err != nil {
-			return lists, nil
+			return nil, err
 		}
+		lists = append(lists, list)
 	}
 
-	return nil, err
+	return lists, nil
 }
