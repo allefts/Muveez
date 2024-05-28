@@ -125,14 +125,13 @@ func (s *Storage) GetUserListsWithMovies(userID int) ([]*types.ListsWithMovies, 
 		}
 
 		//Structs inside maps cannot be modified directly
+		//Pointer so the listmap is also updated
 		listToAddTo := listsMap[listMovie.List.ListID]
 		listToAddTo.Movies = append(listToAddTo.Movies, movie)
-
 	}
 
 	//Map listsMap to Slice
 	var listWithMoviesSlice []*types.ListsWithMovies
-
 	for _, list := range listsMap {
 		listWithMoviesSlice = append(listWithMoviesSlice, list)
 	}

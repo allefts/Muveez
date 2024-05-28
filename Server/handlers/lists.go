@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/allefts/muveez_server/auth"
 	"github.com/allefts/muveez_server/store"
+	"github.com/allefts/muveez_server/types"
+	"github.com/allefts/muveez_server/utils"
 	"github.com/charmbracelet/log"
 	"github.com/go-chi/chi/v5"
 	"github.com/markbates/goth/gothic"
@@ -44,20 +45,20 @@ func (s *ListsService) handleGetUserLists(w http.ResponseWriter, r *http.Request
 		log.Info("User has no lists")
 	}
 
-	for _, list := range lists {
-		fmt.Println("List Name: ", list.List.ListName, "\nList ID: ", list.List.ListID)
-		fmt.Println("# of Movies: ", len(list.Movies))
-		for _, movie := range list.Movies {
-			fmt.Println("Movie Title ", movie.Title, "\nMovie ID: ", movie.MovieId, "\nTMDB ID: ", movie.TmdbId, "\nOverview: ", movie.Overview, "\nURL: ", movie.ImageURL, "\nRelease Date: ", movie.ReleaseDate)
-		}
-	}
-
-	// if err != nil {
-	// 	log.Info(err)
-	// 	utils.JSONResponse(w, types.Error{Message: "error getting user lists"}, http.StatusForbidden)
+	// for _, list := range lists {
+	// 	fmt.Println("List Name: ", list.List.ListName, "\nList ID: ", list.List.ListID)
+	// 	fmt.Println("# of Movies: ", len(list.Movies))
+	// 	for _, movie := range list.Movies {
+	// 		fmt.Println("Movie Title ", movie.Title, "\nMovie ID: ", movie.MovieId, "\nTMDB ID: ", movie.TmdbId, "\nOverview: ", movie.Overview, "\nURL: ", movie.ImageURL, "\nRelease Date: ", movie.ReleaseDate)
+	// 	}
 	// }
 
-	// utils.JSONResponse(w, lists, http.StatusOK)
+	if err != nil {
+		log.Info(err)
+		utils.JSONResponse(w, types.Error{Message: "error getting user lists"}, http.StatusForbidden)
+	}
+
+	utils.JSONResponse(w, lists, http.StatusOK)
 }
 
 func (s *ListsService) handleCreateList() {

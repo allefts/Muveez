@@ -22,7 +22,7 @@ type List struct {
 	ListID    int       `json:"list_id" db:"list_id"`
 	UserID    int       `json:"user_id" db:"user_id"`
 	ListName  string    `json:"list_name" db:"list_name"`
-	CreatedAt time.Time `json:"create_at" db:"created_at"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
 }
 
 type Movie struct {
