@@ -18,27 +18,25 @@ type UserSession struct {
 	Email    string `json:"email"`
 }
 
-type DBList struct {
-	ListID    int       `json:"list_id"`
-	UserID    int       `json:"user_id"`
-	ListName  string    `json:"list_name"`
-	CreatedAt time.Time `json:"create_at"`
-}
-
 type List struct {
 	ListID    int       `json:"list_id"`
 	UserID    int       `json:"user_id"`
 	ListName  string    `json:"list_name"`
 	CreatedAt time.Time `json:"create_at"`
-	Movies    []Movie   `json:"movies"`
 }
 
 type Movie struct {
 	MovieId     int    `json:"movie_id"`
 	TmdbId      int    `json:"tmdb_id"`
 	Title       string `json:"title"`
+	Overview    string `json:"overview"`
 	ReleaseDate string `json:"release_date"`
 	ImageURL    string `json:"image_url"`
+}
+
+type ListWithMovies struct {
+	List   List    `json:"list"`
+	Movies []Movie `json:"movies"`
 }
 
 type ListMovie struct {

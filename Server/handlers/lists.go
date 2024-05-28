@@ -35,7 +35,7 @@ func (s *ListsService) handleGetUserLists(w http.ResponseWriter, r *http.Request
 		log.Info(err)
 	}
 
-	lists, err := s.store.GetUserLists(userID)
+	lists, err := s.store.GetUserListsWithMovies(userID)
 	if err != nil {
 		log.Info(err)
 	}

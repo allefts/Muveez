@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
-import { AuthContext } from "../context/AuthProvider";
+import { AuthContext } from "../Context/AuthProvider";
 import EditForm from "../components/Profile/EditForm";
 
 const StyledProfilePage = styled.div`
