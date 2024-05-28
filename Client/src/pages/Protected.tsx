@@ -1,5 +1,5 @@
 import { ReactNode, useContext } from "react";
-import { AuthContext } from "../Context/AuthProvider";
+import { AuthContext } from "../context/AuthProvider";
 import { Redirect } from "wouter";
 
 const ProtectedPage = ({ children }: { children: ReactNode }) => {

@@ -95,14 +95,13 @@ func (s *Storage) CreateUser(user goth.User) error {
 
 // **************LISTS**************
 
-func (s *Storage) GetUserListsWithMovies(userID int) ([]types.List, error) {
+func (s *Storage) GetUserListsWithMovies(userID int) ([]*types.ListsWithMovies, error) {
 	// rows, err := s.db.Query("SELECT * FROM lists where user_id = ?", userID)
 	rows, err := s.db.Query(`
-		SELECT movies.*, lists.* FROM movies 
-		JOIN users ON users.user_id = lists.user_id 
-		JOIN list_movies ON movies.movie_id = list_movies.movie_id 
-		JOIN lists ON lists.list_id = list_movies.list_id  
-		WHERE users.user_id = ?;`, userID)
+	SELECT movies.*, lists.* FROM lists
+	JOIN list_movies ON lists.list_id = list_movies.list_id 
+	JOIN movies ON movies.movie_id = list_movies.movie_id  
+	WHERE lists.user_id = ?;`, userID)
 
 	if err != nil {
 		return nil, err
@@ -110,17 +109,33 @@ func (s *Storage) GetUserListsWithMovies(userID int) ([]types.List, error) {
 
 	defer rows.Close()
 
-	listWithMovies := types.ListWithMovies{
-		List:   types.List{},
-		Movies: []types.Movie{},
-	}
+	listsMap := make(map[int]*types.ListsWithMovies)
+	//Loop through each row, scan into a temp movie and a temp listmovies. Sort movies into lists by list_id through map key.
 	for rows.Next() {
 		var movie types.Movie
-		if err := rows.Scan(&movie.MovieId, &movie.TmdbId, &movie.Title, &movie.Overview, &movie.ReleaseDate, &movie.ImageURL, &listWithMovies.List.ListID, &listWithMovies.List.UserID, &listWithMovies.List.ListName, &listWithMovies.List.CreatedAt); err != nil {
+		listMovie := &types.ListsWithMovies{List: types.List{}, Movies: []types.Movie{}}
+
+		if err := rows.Scan(&movie.MovieId, &movie.TmdbId, &movie.Title, &movie.Overview, &movie.ReleaseDate, &movie.ImageURL, &listMovie.List.ListID, &listMovie.List.UserID, &listMovie.List.ListName, &listMovie.List.CreatedAt); err != nil {
 			return nil, err
 		}
-		listWithMovies.Movies = append(listWithMovies.Movies, movie)
+
+		// listMovie.Movies = append(listMovie.Movies, movie)
+		if _, ok := listsMap[listMovie.List.ListID]; !ok {
+			listsMap[listMovie.List.ListID] = listMovie
+		}
+
+		//Structs inside maps cannot be modified directly
+		listToAddTo := listsMap[listMovie.List.ListID]
+		listToAddTo.Movies = append(listToAddTo.Movies, movie)
+
 	}
 
-	return nil, nil
+	//Map listsMap to Slice
+	var listWithMoviesSlice []*types.ListsWithMovies
+
+	for _, list := range listsMap {
+		listWithMoviesSlice = append(listWithMoviesSlice, list)
+	}
+
+	return listWithMoviesSlice, nil
 }

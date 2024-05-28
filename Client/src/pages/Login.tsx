@@ -2,7 +2,7 @@ import styled from "styled-components";
 import LoginForm from "../components/Login/LoginForm";
 import { FadeIn } from "../utils/styles/Keyframes";
 import { useContext } from "react";
-import { AuthContext } from "../Context/AuthProvider";
+import { AuthContext } from "../context/AuthProvider";
 import { Redirect } from "wouter";
 
 const StyledLoginPage = styled.div`

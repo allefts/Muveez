@@ -40,7 +40,17 @@ func (s *ListsService) handleGetUserLists(w http.ResponseWriter, r *http.Request
 		log.Info(err)
 	}
 
-	fmt.Println("DBLists: ", lists)
+	if len(lists) == 0 {
+		log.Info("User has no lists")
+	}
+
+	for _, list := range lists {
+		fmt.Println("List Name: ", list.List.ListName, "\nList ID: ", list.List.ListID)
+		fmt.Println("# of Movies: ", len(list.Movies))
+		for _, movie := range list.Movies {
+			fmt.Println("Movie Title ", movie.Title, "\nMovie ID: ", movie.MovieId, "\nTMDB ID: ", movie.TmdbId, "\nOverview: ", movie.Overview, "\nURL: ", movie.ImageURL, "\nRelease Date: ", movie.ReleaseDate)
+		}
+	}
 
 	// if err != nil {
 	// 	log.Info(err)

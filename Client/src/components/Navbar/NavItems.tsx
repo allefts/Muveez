@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link } from "wouter";
 import { BsBrightnessHigh, BsMoon } from "react-icons/bs";
-import { AuthContext } from "../../Context/AuthProvider";
+import { AuthContext } from "../../context/AuthProvider";
 
 import styled from "styled-components";
 
