@@ -23,11 +23,20 @@ func NewListsService(store *store.Storage) *ListsService {
 }
 
 func (s *ListsService) RegisterRoutes(r *chi.Mux, authHandler *auth.AuthHandler) {
-	r.Get("/user/lists", auth.RequireAuth(s.handleGetUserLists, authHandler))
+	r.Get("/user/lists", auth.RequireAuth(s.handleGetUserListsWithMovies, authHandler))
+	r.Get("/lists", auth.RequireAuth(s.handleGetUserListsWithMovies, authHandler))
 
 }
 
+// Just Lists
 func (s *ListsService) handleGetUserLists(w http.ResponseWriter, r *http.Request) {
+	// session, _ := gothic.Store.Get(r, auth.SessionName)
+	// email := session.Values["email"].(string)
+
+}
+
+// Lists With Movies
+func (s *ListsService) handleGetUserListsWithMovies(w http.ResponseWriter, r *http.Request) {
 	session, _ := gothic.Store.Get(r, auth.SessionName)
 	email := session.Values["email"].(string)
 

@@ -38,9 +38,9 @@ const ProfilePage = () => {
   return (
     <StyledProfilePage>
       <StyledUserInfo>
-        <img src={user?.avatarURL} alt="Profile" />
+        <img src={user?.avatar_url} alt="Profile" />
         <h3>{user?.email}</h3>
-        <h3>{user?.createdAt}</h3>
+        <h3>{user?.created_at}</h3>
       </StyledUserInfo>
       <EditForm>
         <label htmlFor="username"></label>

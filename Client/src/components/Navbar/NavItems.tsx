@@ -36,7 +36,7 @@ const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
           Lists
         </Link>
         <Link to="/profile">
-          <img className="profile_image" src={user.avatarURL} />
+          <img className="profile_image" src={user.avatar_url} />
         </Link>
         <ThemeSelector theme={theme} toggleTheme={toggleTheme} />
       </StyledNavItems>

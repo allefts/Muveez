@@ -1,6 +1,8 @@
 import axios from "axios";
 import useSWR from "swr";
-import { toUser } from "./toUser";
+import { toUser } from "./typeConversions";
+import { ListWithMovies } from "../types";
+import useSWRImmutable from "swr/immutable";
 
 const serverAPI = axios.create({
   baseURL: "http://localhost:8000",
@@ -27,4 +29,18 @@ const useUser = () => {
   };
 };
 
-export { useUser, serverFetcher };
+//HOOK to get all user lists and movies along with them
+const useAllUserListsWithMovies = () => {
+  const { data, isLoading, error } = useSWRImmutable<ListWithMovies[]>(
+    "/user/lists",
+    serverFetcher
+  );
+
+  if (data) {
+    return { lists: data, isLoading, error };
+  }
+
+  return { lists: null, isLoading, isError: error };
+};
+
+export { useAllUserListsWithMovies, useUser, serverFetcher };
