@@ -1,5 +1,14 @@
+import styled from "styled-components";
+import NewListBtn from "./NewListBtn";
+
+const StyledListsActions = styled.div``;
+
 const ListsActions = () => {
-  return <div>List Actions</div>;
+  return (
+    <StyledListsActions>
+      <NewListBtn />
+    </StyledListsActions>
+  );
 };
 
 export default ListsActions;

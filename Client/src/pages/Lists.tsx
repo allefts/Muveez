@@ -24,12 +24,16 @@ const ListPage = () => {
     return <StyledListPage>Error Getting Lists</StyledListPage>;
   }
 
-  return (
-    <StyledListPage>
-      <ListsActions />
-      <ListsContent lists={lists} />
-    </StyledListPage>
-  );
+  if (lists) {
+    return (
+      <StyledListPage>
+        <ListsActions />
+        <ListsContent lists={lists} />
+      </StyledListPage>
+    );
+  } else {
+    return;
+  }
 };
 
 export default ListPage;
