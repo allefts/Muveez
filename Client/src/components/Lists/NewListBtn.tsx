@@ -1,4 +1,4 @@
-import { BsPlusCircle } from "react-icons/bs";
+import { BsPlus } from "react-icons/bs";
 import styled from "styled-components";
 
 const StyledNewListBtn = styled.button`
@@ -8,19 +8,20 @@ const StyledNewListBtn = styled.button`
   padding: 4px 12px;
   cursor: pointer;
   border: none;
-  outline: none
+  border-radius: 1rem;
+  outline: none;
 
-  background: transparent;
+  background: ${({ theme }) => theme.primary};
 
   svg {
-    margin-left: 0.5rem;
+    margin-left: 0.25rem;
   }
 `;
 
 const NewListBtn = () => {
   return (
     <StyledNewListBtn>
-      New <BsPlusCircle size={24} />
+      New <BsPlus size={24} />
     </StyledNewListBtn>
   );
 };

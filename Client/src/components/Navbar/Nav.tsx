@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import { Link } from "wouter";
 import NavItems from "./NavItems";
-import SearchBar from "./Search";
 
 const StyledNav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 1rem;
+  padding: 1rem 2rem;
 
   .home_link {
     font-size: 2rem;
@@ -27,7 +26,6 @@ const Nav = ({
       <Link className="home_link" to="/">
         Muveez
       </Link>
-      <SearchBar />
       <NavItems theme={theme} toggleTheme={toggleTheme} />
     </StyledNav>
   );

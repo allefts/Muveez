@@ -6,7 +6,7 @@ const ProtectedPage = ({ children }: { children: ReactNode }) => {
   const { user } = useContext(AuthContext);
 
   if (!user) {
-    <Redirect to="/login" replace={true} />;
+    return <Redirect to="/login" replace={true} />;
   }
 
   return <div>{children}</div>;

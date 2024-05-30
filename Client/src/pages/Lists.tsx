@@ -2,12 +2,14 @@ import styled from "styled-components";
 import { useAllUserListsWithMovies } from "../utils/helpers/serverFetcher";
 import ListsActions from "../components/Lists/ListsActions";
 import ListsContent from "../components/Lists/ListsContent";
+import ListsHeader from "../components/Lists/ListsHeader";
+import { useState } from "react";
+import { ListPageState } from "../utils/types";
+import ListCreate from "../components/Lists/ListCreate";
 
 const StyledListPage = styled.section`
-  margin: 2rem;
+  margin: 0 auto;
   padding: 2rem;
-
-  border: 2px solid green;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -15,6 +17,9 @@ const StyledListPage = styled.section`
 
 const ListPage = () => {
   const { lists, isLoading, isError } = useAllUserListsWithMovies();
+  const [pageState, setPageState] = useState<ListPageState>(
+    ListPageState.VIEWING
+  );
 
   if (isLoading) {
     return <StyledListPage>Loading...</StyledListPage>;
@@ -24,11 +29,24 @@ const ListPage = () => {
     return <StyledListPage>Error Getting Lists</StyledListPage>;
   }
 
+  const renderCurrentState = () => {
+    switch (pageState) {
+      case ListPageState.VIEWING:
+        return <ListsContent lists={lists!} setPageState={setPageState} />;
+      case ListPageState.CREATING:
+        return <ListCreate />;
+        break;
+      case ListPageState.EDITING:
+        break;
+    }
+  };
+
   if (lists) {
     return (
       <StyledListPage>
+        <ListsHeader />
         <ListsActions />
-        <ListsContent lists={lists} />
+        {renderCurrentState()}
       </StyledListPage>
     );
   } else {

@@ -42,7 +42,7 @@ const LoginPage = () => {
   const { user } = useContext(AuthContext);
 
   if (user) {
-    <Redirect to="/" replace={true} />;
+    return <Redirect to="/" replace={true} />;
   }
 
   return (
