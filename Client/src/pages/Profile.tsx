@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
 import styled from "styled-components";
-import { AuthContext } from "../context/AuthProvider";
 import EditForm from "../components/Profile/EditForm";
+import { useUser } from "../utils/helpers/serverFetcher";
+import { useState } from "react";
 
 const StyledProfilePage = styled.div`
   margin-top: 5rem;
@@ -27,7 +27,7 @@ const StyledUserInfo = styled.div`
 `;
 
 const ProfilePage = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useUser();
   const [username, setUsername] = useState(user?.username);
 
   const handleUpdateUsername = () => {

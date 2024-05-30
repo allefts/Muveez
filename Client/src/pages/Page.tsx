@@ -1,24 +1,22 @@
-import { Route, Switch } from "wouter";
 import LandingPage from "./Landing";
 import LoginPage from "./Login";
 import ListPage from "./Lists";
 import ProfilePage from "./Profile";
-import ProtectedPage from "./Protected";
+import ErrorPage from "./Error";
+import { Router } from "../Router";
+import { match } from "ts-pattern";
 
 const Page = () => {
-  return (
-    <Switch>
-      {/* PUBLIC */}
-      <Route path="/" component={LandingPage} />
-      <Route path="/login" component={LoginPage} />
+  const route = Router.useRoute(["Landing", "Login", "Profile", "Lists"]);
 
-      {/* PRIVATE */}
-      <ProtectedPage>
-        <Route path="/lists" component={ListPage} />
-        <Route path="/profile" component={ProfilePage} />
-      </ProtectedPage>
-    </Switch>
-  );
+  const renderedPage = match(route)
+    .with({ name: "Landing" }, () => <LandingPage />)
+    .with({ name: "Login" }, () => <LoginPage />)
+    .with({ name: "Profile" }, () => <ProfilePage />)
+    .with({ name: "Lists" }, () => <ListPage />)
+    .otherwise(() => <ErrorPage />);
+
+  return renderedPage;
 };
 
 export default Page;

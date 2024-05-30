@@ -4,40 +4,52 @@ import ListsActions from "../components/Lists/ListsActions";
 import ListsContent from "../components/Lists/ListsContent";
 import ListsHeader from "../components/Lists/ListsHeader";
 import { useState } from "react";
-import { ListPageState } from "../utils/types";
 import ListCreate from "../components/Lists/ListCreate";
+import ListViewing from "../components/Lists/ListView";
 
 const StyledListPage = styled.section`
-  margin: 0 auto;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
 `;
 
+export enum ListPageState {
+  DEFAULT,
+  CREATING,
+  VIEWING,
+}
+
 const ListPage = () => {
-  const { lists, isLoading, isError } = useAllUserListsWithMovies();
+  const { lists } = useAllUserListsWithMovies();
   const [pageState, setPageState] = useState<ListPageState>(
-    ListPageState.VIEWING
+    ListPageState.DEFAULT
   );
 
-  if (isLoading) {
-    return <StyledListPage>Loading...</StyledListPage>;
-  }
-
-  if (isError) {
-    return <StyledListPage>Error Getting Lists</StyledListPage>;
-  }
+  const handleBack = () => {
+    setPageState(ListPageState.DEFAULT);
+  };
+  const handleView = () => {
+    setPageState(ListPageState.VIEWING);
+  };
+  const handleCreate = () => {
+    setPageState(ListPageState.CREATING);
+  };
 
   const renderCurrentState = () => {
     switch (pageState) {
-      case ListPageState.VIEWING:
-        return <ListsContent lists={lists!} setPageState={setPageState} />;
+      case ListPageState.DEFAULT:
+        return (
+          <ListsContent
+            lists={lists!}
+            handleView={handleView}
+            handleCreate={handleCreate}
+          />
+        );
       case ListPageState.CREATING:
         return <ListCreate />;
-        break;
-      case ListPageState.EDITING:
-        break;
+      case ListPageState.VIEWING:
+        return <ListViewing />;
     }
   };
 
@@ -45,7 +57,11 @@ const ListPage = () => {
     return (
       <StyledListPage>
         <ListsHeader />
-        <ListsActions />
+        <ListsActions
+          pageState={pageState}
+          handleBack={handleBack}
+          handleCreate={handleCreate}
+        />
         {renderCurrentState()}
       </StyledListPage>
     );

@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { Link } from "wouter";
 import NavItems from "./NavItems";
+import { Link } from "@swan-io/chicane";
+import { Router } from "../../Router";
 
 const StyledNav = styled.nav`
   display: flex;
@@ -23,7 +24,7 @@ const Nav = ({
 }) => {
   return (
     <StyledNav className="">
-      <Link className="home_link" to="/">
+      <Link className="home_link" to={Router.Landing()}>
         Muveez
       </Link>
       <NavItems theme={theme} toggleTheme={toggleTheme} />

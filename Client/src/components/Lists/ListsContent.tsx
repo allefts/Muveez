@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { ListPageState, ListWithMovies } from "../../utils/types";
+import { ListWithMovies } from "../../utils/types";
 import ListCard from "./ListCard";
 import NewListCard from "./NewListCard";
-import { Dispatch } from "react";
 
 const StyledListsContents = styled.div`
   display: grid;
@@ -10,16 +9,20 @@ const StyledListsContents = styled.div`
   grid-template-rows: auto;
   gap: 2rem;
   border-radius: 0.5rem;
-
   justify-content: center;
 `;
 
 type ListsContentProps = {
   lists: ListWithMovies[];
-  setPageState: Dispatch<React.SetStateAction<ListPageState>>;
+  handleView: () => void;
+  handleCreate: () => void;
 };
 
-const ListsContent = ({ lists, setPageState }: ListsContentProps) => {
+const ListsContent = ({
+  lists,
+  handleCreate,
+  handleView,
+}: ListsContentProps) => {
   const renderLists = () => {
     const foundLists = lists.map((list, idx) => {
       return (
@@ -28,6 +31,7 @@ const ListsContent = ({ lists, setPageState }: ListsContentProps) => {
           list={list.list}
           bgImage={list.movies[0].image_url}
           numContents={list.movies.length}
+          handleView={handleView}
         />
       );
     });
@@ -35,13 +39,9 @@ const ListsContent = ({ lists, setPageState }: ListsContentProps) => {
   };
 
   return (
-    <StyledListsContents
-      onClick={() => {
-        setPageState(ListPageState.EDITING);
-      }}
-    >
+    <StyledListsContents>
       {renderLists()}
-      <NewListCard />
+      <NewListCard handleCreate={handleCreate} />
     </StyledListsContents>
   );
 };

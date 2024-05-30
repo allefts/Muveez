@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { Link } from "wouter";
 import { BsBrightnessHigh, BsMoon } from "react-icons/bs";
-import { AuthContext } from "../../context/AuthProvider";
-
 import styled from "styled-components";
+import { useUser } from "../../utils/helpers/serverFetcher";
+import { Link } from "@swan-io/chicane";
+import { Router } from "../../Router";
 
 const StyledNavItems = styled.div`
   display: flex;
@@ -27,15 +26,15 @@ type NavItemProps = {
 };
 
 const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useUser();
 
   if (user)
     return (
       <StyledNavItems>
-        <Link className="lists_link" to="/lists">
+        <Link className="lists_link" to={Router.Lists()}>
           Lists
         </Link>
-        <Link to="/profile">
+        <Link to={Router.Profile()}>
           <img className="profile_image" src={user.avatar_url} />
         </Link>
         <ThemeSelector theme={theme} toggleTheme={toggleTheme} />
@@ -43,7 +42,7 @@ const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
     );
 
   return (
-    <Link className="lists_link" to="/login" replace>
+    <Link className="lists_link" to={Router.Login()}>
       Login
     </Link>
   );

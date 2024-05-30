@@ -21,9 +21,13 @@ const StyledNewListCard = styled.div`
   }
 `;
 
-const NewListCard = () => {
+type NewListCardProps = {
+  handleCreate: () => void;
+};
+
+const NewListCard = ({ handleCreate }: NewListCardProps) => {
   return (
-    <StyledNewListCard>
+    <StyledNewListCard onClick={handleCreate}>
       <BsPlus size={64} />
     </StyledNewListCard>
   );

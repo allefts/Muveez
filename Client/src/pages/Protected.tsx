@@ -1,12 +1,15 @@
-import { ReactNode, useContext } from "react";
-import { AuthContext } from "../context/AuthProvider";
-import { Redirect } from "wouter";
+import { ReactNode } from "react";
+import { useUser } from "../utils/helpers/serverFetcher";
 
 const ProtectedPage = ({ children }: { children: ReactNode }) => {
-  const { user } = useContext(AuthContext);
+  const { user, isLoading, isError } = useUser();
 
-  if (!user) {
-    return <Redirect to="/login" replace={true} />;
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if ((!isLoading && !user) || isError) {
+    ("");
   }
 
   return <div>{children}</div>;

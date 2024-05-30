@@ -29,10 +29,4 @@ type ListWithMovies = {
   movies: Movie[];
 };
 
-export enum ListPageState {
-  CREATING,
-  EDITING,
-  VIEWING,
-}
-
 export type { List, Movie, ListWithMovies, UserData };

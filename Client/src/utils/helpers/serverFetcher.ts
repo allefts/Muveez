@@ -1,5 +1,4 @@
 import axios from "axios";
-import useSWR from "swr";
 import { toUser } from "./typeConversions";
 import { ListWithMovies } from "../types";
 import useSWRImmutable from "swr/immutable";
@@ -16,7 +15,7 @@ const serverFetcher = (url: string) =>
 
 //HOOK to get current user
 const useUser = () => {
-  const { data, isLoading, error } = useSWR("/user", serverFetcher);
+  const { data, isLoading, error } = useSWRImmutable("/user", serverFetcher);
 
   if (data) {
     return { user: toUser(data), isLoading, isError: error };

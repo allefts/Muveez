@@ -60,12 +60,18 @@ type ListCardProps = {
   list: List;
   numContents: number;
   bgImage: string;
+  handleView: () => void;
 };
 
-const ListCard = ({ list, numContents = 0, bgImage = "" }: ListCardProps) => {
+const ListCard = ({
+  list,
+  numContents = 0,
+  bgImage = "",
+  handleView,
+}: ListCardProps) => {
   return (
     <StyledListCard>
-      <div className="card_content">
+      <div className="card_content" onClick={handleView}>
         <img src={bgImage} alt="Movie Poster" />
         <div className="left_content">
           <div>

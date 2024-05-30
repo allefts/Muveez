@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import LoginForm from "../components/Login/LoginForm";
 import { FadeIn } from "../utils/styles/Keyframes";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthProvider";
-import { Redirect } from "wouter";
 
 const StyledLoginPage = styled.div`
   height: 90vh;
@@ -39,11 +36,11 @@ const StyledRightContent = styled.div`
 `;
 
 const LoginPage = () => {
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
 
-  if (user) {
-    return <Redirect to="/" replace={true} />;
-  }
+  // if (user) {
+  //   return <Redirect to="/" replace={true} />;
+  // }
 
   return (
     <StyledLoginPage>
