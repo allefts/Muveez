@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { List } from "../../utils/types";
 import { toWrittenDate } from "../../utils/helpers/toDate";
+import { List } from "../../utils/types";
+import { Link } from "react-router-dom";
 
 const StyledListCard = styled.div`
   width: 100%;
@@ -64,29 +65,29 @@ const StyledListCard = styled.div`
 
 type ListCardProps = {
   list: List;
+  moviePosterUrl: string;
   numContents: number;
-  bgImage: string;
-  handleView: () => void;
 };
 
 const ListCard = ({
   list,
+  moviePosterUrl = "",
   numContents = 0,
-  bgImage = "",
-  handleView,
 }: ListCardProps) => {
   return (
     <StyledListCard>
-      <div className="card_content" onClick={handleView}>
-        <img src={bgImage} alt="Movie Poster" />
-        <div className="left_content">
-          <div>
-            <h2>{list.list_name}</h2>
-            <p>Created on {toWrittenDate(new Date(list.created_at))}</p>
+      <Link to={`${list.list_id}`}>
+        <div className="card_content">
+          <img src={moviePosterUrl} alt="Movie Poster" />
+          <div className="left_content">
+            <div>
+              <h2>{list.list_name}</h2>
+              <p>Created on {toWrittenDate(new Date(list.created_at))}</p>
+            </div>
+            <p className="num_items">{numContents} items</p>
           </div>
-          <p className="num_items">{numContents} items</p>
         </div>
-      </div>
+      </Link>
     </StyledListCard>
   );
 };

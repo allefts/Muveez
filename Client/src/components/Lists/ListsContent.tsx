@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { ListWithMovies } from "../../utils/types";
-import ListCard from "./ListCard";
 import NewListCard from "./NewListCard";
+import { useAllUserListsWithMovies } from "../../utils/helpers/serverFetcher";
+import ListCard from "./ListCard";
 
 const StyledListsContents = styled.div`
   width: 100%;
@@ -16,26 +16,25 @@ const StyledListsContents = styled.div`
   align-items: center;
 `;
 
-type ListsContentProps = {
-  lists: ListWithMovies[];
-  handleView: () => void;
-  handleCreate: () => void;
-};
+const ListsContent = () => {
+  const { lists, isLoading, isError } = useAllUserListsWithMovies();
 
-const ListsContent = ({
-  lists,
-  handleCreate,
-  handleView,
-}: ListsContentProps) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error....</div>;
+  }
+
   const renderLists = () => {
-    const foundLists = lists.map((list, idx) => {
+    const foundLists = lists!.map((list, idx) => {
       return (
         <ListCard
           key={idx}
           list={list.list}
-          bgImage={list.movies[0].image_url}
+          moviePosterUrl={list.movies[1].image_url}
           numContents={list.movies.length}
-          handleView={handleView}
         />
       );
     });
@@ -45,7 +44,7 @@ const ListsContent = ({
   return (
     <StyledListsContents>
       {renderLists()}
-      <NewListCard handleCreate={handleCreate} />
+      <NewListCard />
     </StyledListsContents>
   );
 };

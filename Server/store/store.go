@@ -3,6 +3,7 @@ package store
 import (
 	"database/sql"
 	"fmt"
+	"strconv"
 
 	"github.com/allefts/muveez_server/types"
 	"github.com/markbates/goth"
@@ -139,33 +140,38 @@ func (s *Storage) GetUserListsWithMovies(userID int) ([]*types.ListsWithMovies, 
 	return listWithMoviesSlice, nil
 }
 
-func (s *Storage) GetUserListMovie(listID int) (types.ListsWithMovies, error) {
-	row, err := s.db.Query(`
+// Gets a users list with movies from a listID
+func (s *Storage) GetUserListMovie(listID string) (types.ListsWithMovies, error) {
+	listIdInt, err := strconv.Atoi(listID)
+
+	if err != nil {
+		return types.ListsWithMovies{}, err
+	}
+
+	rows, err := s.db.Query(`
 	SELECT lists.*, movies.*
 	FROM lists
 	JOIN list_movies ON lists.list_id = list_movies.list_id
 	JOIN movies ON movies.movie_id = list_movies.movie_id
-	WHERE lists.list_id = ?;`, listID)
+	WHERE lists.list_id = ?;`, listIdInt)
 
 	if err != nil {
 		return types.ListsWithMovies{}, err
 	}
 
-	defer row.Close()
-
-	if !row.Next() {
-		return types.ListsWithMovies{}, fmt.Errorf("no list with movie found")
-	}
+	defer rows.Close()
 
 	var list types.ListsWithMovies
-	var movie types.Movie
-	err = row.Scan(&list.List.ListID, &list.List.UserID, &list.List.ListName, &movie.MovieId, &movie.TmdbId, &movie.Title, &movie.Overview, &movie.ReleaseDate, &movie.ImageURL)
+	for rows.Next() {
+		var movie types.Movie
+		err = rows.Scan(&list.List.ListID, &list.List.UserID, &list.List.ListName, &list.List.CreatedAt, &movie.MovieId, &movie.TmdbId, &movie.Title, &movie.Overview, &movie.ReleaseDate, &movie.ImageURL)
+
+		list.Movies = append(list.Movies, movie)
+	}
 
 	if err != nil {
 		return types.ListsWithMovies{}, err
 	}
-
-	list.Movies = append(list.Movies, movie)
 
 	return list, nil
 }

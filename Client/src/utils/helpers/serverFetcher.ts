@@ -13,6 +13,12 @@ const serverAPI = axios.create({
 const serverFetcher = (url: string) =>
   serverAPI.get(url).then((res) => res.data);
 
+// const routerLoaderFetcher = <T>(url: string, params?: Params<string>) => {
+//   if (params) {
+//     const res = serverFetcher(`${url}` + params);
+//   }
+// };
+
 //HOOK to get current user
 const useUser = () => {
   const { data, isLoading, error } = useSWRImmutable("/user", serverFetcher);
@@ -28,6 +34,20 @@ const useUser = () => {
   };
 };
 
+//HOOK to get a list with its movies by listId
+const useListWithMovies = (listId: string) => {
+  const { data, isLoading, error } = useSWRImmutable<ListWithMovies>(
+    `/list/${listId}`,
+    serverFetcher
+  );
+
+  return {
+    list: data ?? null,
+    isLoading,
+    isError: error,
+  };
+};
+
 //HOOK to get all user lists and movies along with them
 const useAllUserListsWithMovies = () => {
   const { data, isLoading, error } = useSWRImmutable<ListWithMovies[]>(
@@ -35,11 +55,7 @@ const useAllUserListsWithMovies = () => {
     serverFetcher
   );
 
-  if (data) {
-    return { lists: data, isLoading, error };
-  }
-
-  return { lists: null, isLoading, isError: error };
+  return { lists: data ?? null, isLoading, isError: error };
 };
 
-export { useAllUserListsWithMovies, useUser, serverFetcher };
+export { useListWithMovies, useAllUserListsWithMovies, useUser, serverFetcher };

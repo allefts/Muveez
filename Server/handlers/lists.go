@@ -24,6 +24,7 @@ func NewListsService(store *store.Storage) *ListsService {
 
 func (s *ListsService) RegisterRoutes(r *chi.Mux, authHandler *auth.AuthHandler) {
 	r.Get("/user/lists", auth.RequireAuth(s.handleGetUserListsWithMovies, authHandler))
+	r.Get("/list/{id}", auth.RequireAuth(s.handleGetUserListWithMovies, authHandler))
 
 }
 
@@ -32,6 +33,18 @@ func (s *ListsService) handleGetUserLists(w http.ResponseWriter, r *http.Request
 	// session, _ := gothic.Store.Get(r, auth.SessionName)
 	// email := session.Values["email"].(string)
 
+}
+
+// List with movies by id
+func (s *ListsService) handleGetUserListWithMovies(w http.ResponseWriter, r *http.Request) {
+	listId := chi.URLParam(r, "id")
+	listWithMovies, err := s.store.GetUserListMovie(listId)
+
+	if err != nil {
+		log.Info(err)
+	}
+
+	utils.JSONResponse(w, listWithMovies, http.StatusOK)
 }
 
 // Lists With Movies
