@@ -24,15 +24,16 @@ type Store interface {
 	//USER QUERIES
 	GetUser(email string) (types.User, error)
 	GetUserIDFromEmail(email string) (int, error)
+
 	IsThereUser(email string) bool
 	CreateUser(user goth.User)
 
 	//LIST_MOVIES QUERIES
-	GetUserListsWithMovies(userId string) ([]types.List, error)
+	GetUserListsWithMovies(userID string) ([]types.List, error)
+	GetUserListMovie(listID string) (types.ListsWithMovies, error)
 }
 
 // **************USER**************
-
 // userID is stored only on db, googleID comes from OAuth, need to query userID...
 func (s *Storage) GetUserIDFromEmail(email string) (int, error) {
 	row, err := s.db.Query("SELECT user_id FROM users WHERE email = ? LIMIT 1", email)
@@ -94,7 +95,6 @@ func (s *Storage) CreateUser(user goth.User) error {
 }
 
 // **************LISTS**************
-
 func (s *Storage) GetUserListsWithMovies(userID int) ([]*types.ListsWithMovies, error) {
 	// rows, err := s.db.Query("SELECT * FROM lists where user_id = ?", userID)
 	rows, err := s.db.Query(`
@@ -137,4 +137,35 @@ func (s *Storage) GetUserListsWithMovies(userID int) ([]*types.ListsWithMovies, 
 	}
 
 	return listWithMoviesSlice, nil
+}
+
+func (s *Storage) GetUserListMovie(listID int) (types.ListsWithMovies, error) {
+	row, err := s.db.Query(`
+	SELECT lists.*, movies.*
+	FROM lists
+	JOIN list_movies ON lists.list_id = list_movies.list_id
+	JOIN movies ON movies.movie_id = list_movies.movie_id
+	WHERE lists.list_id = ?;`, listID)
+
+	if err != nil {
+		return types.ListsWithMovies{}, err
+	}
+
+	defer row.Close()
+
+	if !row.Next() {
+		return types.ListsWithMovies{}, fmt.Errorf("no list with movie found")
+	}
+
+	var list types.ListsWithMovies
+	var movie types.Movie
+	err = row.Scan(&list.List.ListID, &list.List.UserID, &list.List.ListName, &movie.MovieId, &movie.TmdbId, &movie.Title, &movie.Overview, &movie.ReleaseDate, &movie.ImageURL)
+
+	if err != nil {
+		return types.ListsWithMovies{}, err
+	}
+
+	list.Movies = append(list.Movies, movie)
+
+	return list, nil
 }

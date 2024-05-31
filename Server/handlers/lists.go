@@ -24,7 +24,6 @@ func NewListsService(store *store.Storage) *ListsService {
 
 func (s *ListsService) RegisterRoutes(r *chi.Mux, authHandler *auth.AuthHandler) {
 	r.Get("/user/lists", auth.RequireAuth(s.handleGetUserListsWithMovies, authHandler))
-	r.Get("/lists", auth.RequireAuth(s.handleGetUserListsWithMovies, authHandler))
 
 }
 
@@ -53,14 +52,6 @@ func (s *ListsService) handleGetUserListsWithMovies(w http.ResponseWriter, r *ht
 	if len(lists) == 0 {
 		log.Info("User has no lists")
 	}
-
-	// for _, list := range lists {
-	// 	fmt.Println("List Name: ", list.List.ListName, "\nList ID: ", list.List.ListID)
-	// 	fmt.Println("# of Movies: ", len(list.Movies))
-	// 	for _, movie := range list.Movies {
-	// 		fmt.Println("Movie Title ", movie.Title, "\nMovie ID: ", movie.MovieId, "\nTMDB ID: ", movie.TmdbId, "\nOverview: ", movie.Overview, "\nURL: ", movie.ImageURL, "\nRelease Date: ", movie.ReleaseDate)
-	// 	}
-	// }
 
 	if err != nil {
 		log.Info(err)
