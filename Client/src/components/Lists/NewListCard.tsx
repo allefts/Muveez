@@ -12,8 +12,15 @@ const StyledNewListCard = styled.div`
   border: 2px solid ${({ theme }) => theme.primary};
   color: ${({ theme }) => theme.primary};
 
+  transition: all 300ms ease;
+  filter: brightness(0.6);
+
   svg {
     transition: all 300ms ease;
+  }
+
+  &:hover {
+    filter: brightness(1);
   }
 
   &:hover svg {

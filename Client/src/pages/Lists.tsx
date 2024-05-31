@@ -6,8 +6,12 @@ import ListsHeader from "../components/Lists/ListsHeader";
 import { useState } from "react";
 import ListCreate from "../components/Lists/ListCreate";
 import ListViewing from "../components/Lists/ListView";
+import { flushSync } from "react-dom";
 
 const StyledListPage = styled.section`
+  max-width: 1600px;
+  margin: 0 auto;
+
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -20,17 +24,23 @@ export enum ListPageState {
   VIEWING,
 }
 
-const ListPage = () => {
+type ListPageProps = {
+  defaultState?: ListPageState;
+};
+
+const ListPage = ({ defaultState = ListPageState.DEFAULT }: ListPageProps) => {
   const { lists } = useAllUserListsWithMovies();
-  const [pageState, setPageState] = useState<ListPageState>(
-    ListPageState.DEFAULT
-  );
+  const [pageState, setPageState] = useState<ListPageState>(defaultState);
 
   const handleBack = () => {
     setPageState(ListPageState.DEFAULT);
   };
   const handleView = () => {
-    setPageState(ListPageState.VIEWING);
+    document.startViewTransition(() => {
+      flushSync(() => {
+        setPageState(ListPageState.VIEWING);
+      });
+    });
   };
   const handleCreate = () => {
     setPageState(ListPageState.CREATING);

@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const StyledListsHeader = styled.div`
   text-align: center;
+  pointer-events: none;
 
   h1 {
     font-size: 3rem;

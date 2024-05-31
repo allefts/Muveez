@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
 import { useUser } from "../utils/helpers/serverFetcher";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedPage = ({ children }: { children: ReactNode }) => {
+const ProtectedPage = () => {
   const { user, isLoading, isError } = useUser();
 
   if (isLoading) {
@@ -9,10 +9,10 @@ const ProtectedPage = ({ children }: { children: ReactNode }) => {
   }
 
   if ((!isLoading && !user) || isError) {
-    ("");
+    return <Navigate to="/login" />;
   }
 
-  return <div>{children}</div>;
+  return <Outlet />;
 };
 
 export default ProtectedPage;

@@ -1,8 +1,7 @@
 import { BsBrightnessHigh, BsMoon } from "react-icons/bs";
 import styled from "styled-components";
 import { useUser } from "../../utils/helpers/serverFetcher";
-import { Link } from "@swan-io/chicane";
-import { Router } from "../../Router";
+import { Link } from "react-router-dom";
 
 const StyledNavItems = styled.div`
   display: flex;
@@ -31,10 +30,10 @@ const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
   if (user)
     return (
       <StyledNavItems>
-        <Link className="lists_link" to={Router.Lists()}>
+        <Link className="lists_link" to="/lists">
           Lists
         </Link>
-        <Link to={Router.Profile()}>
+        <Link to="/profile">
           <img className="profile_image" src={user.avatar_url} />
         </Link>
         <ThemeSelector theme={theme} toggleTheme={toggleTheme} />
@@ -42,7 +41,7 @@ const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
     );
 
   return (
-    <Link className="lists_link" to={Router.Login()}>
+    <Link className="lists_link" to="/login">
       Login
     </Link>
   );

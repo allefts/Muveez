@@ -15,6 +15,10 @@ const StyledListCard = styled.div`
     filter: brightness(1);
   }
 
+  &:hover .card_content {
+    filter: brightness(1);
+  }
+
   img {
     position: absolute;
     top: 0;
@@ -31,10 +35,12 @@ const StyledListCard = styled.div`
     height: 100%;
     padding: 1rem;
     position: relative;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+
+    transition: all 300ms ease;
+    filter: brightness(0.8);
 
     color: ${({ theme }) => theme.primary};
 

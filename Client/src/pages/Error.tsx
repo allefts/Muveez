@@ -1,10 +1,24 @@
+import styled from "styled-components";
+
+const StyledErrorPage = styled.div`
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+
+  h1 {
+    font-size: 4rem;
+  }
+  p {
+    font-size: 2rem;
+  }
+`;
+
 const ErrorPage = () => {
   return (
-    <div>
+    <StyledErrorPage>
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occured.</p>
-      <p>{/* <i>{error.statusText || error.message}</i> */}</p>
-    </div>
+    </StyledErrorPage>
   );
 };
 

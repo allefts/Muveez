@@ -1,29 +1,16 @@
-import styled, { ThemeProvider } from "styled-components";
-import Footer from "./components/Footer/Footer";
-import Nav from "./components/Navbar/Nav";
-import Page from "./pages/Page";
-import { useState } from "react";
-import { lightTheme, darkTheme, GlobalStyle } from "./utils/styles/Themes";
+import styled from "styled-components";
+import { RouterProvider } from "react-router-dom";
+import { Router } from "./Router";
 
 const StyledApp = styled.div`
   // padding: 1.5rem;
 `;
 
 function App() {
-  const [theme, setTheme] = useState("dark");
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-
   return (
-    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-      <StyledApp>
-        <GlobalStyle />
-        <Nav theme={theme} toggleTheme={toggleTheme} />
-        <Page />
-        <Footer />
-      </StyledApp>
-    </ThemeProvider>
+    <StyledApp>
+      <RouterProvider router={Router} />
+    </StyledApp>
   );
 }
 

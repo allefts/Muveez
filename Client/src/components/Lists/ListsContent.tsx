@@ -4,12 +4,16 @@ import ListCard from "./ListCard";
 import NewListCard from "./NewListCard";
 
 const StyledListsContents = styled.div`
+  width: 100%;
+  margin: 0 auto;
+
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 450px));
   grid-template-rows: auto;
   gap: 2rem;
   border-radius: 0.5rem;
   justify-content: center;
+  align-items: center;
 `;
 
 type ListsContentProps = {
