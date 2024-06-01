@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import ListsActions from "../components/Lists/ListsActions";
-import ListsHeader from "../components/Lists/ListsHeader";
 import { Outlet } from "react-router-dom";
 
 const StyledListPage = styled.section`
@@ -18,8 +16,6 @@ const StyledListPage = styled.section`
 const ListPage = () => {
   return (
     <StyledListPage>
-      <ListsHeader />
-      <ListsActions />
       <Outlet />
     </StyledListPage>
   );

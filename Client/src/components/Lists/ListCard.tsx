@@ -76,12 +76,12 @@ const ListCard = ({
 }: ListCardProps) => {
   return (
     <StyledListCard>
-      <Link to={`${list.list_id}`}>
+      <Link to={`${list.list_id}`} style={{ textDecoration: "none" }}>
         <div className="card_content">
           <img src={moviePosterUrl} alt="Movie Poster" />
           <div className="left_content">
             <div>
-              <h2>{list.list_name}</h2>
+              <h1>{list.list_name}</h1>
               <p>Created on {toWrittenDate(new Date(list.created_at))}</p>
             </div>
             <p className="num_items">{numContents} items</p>

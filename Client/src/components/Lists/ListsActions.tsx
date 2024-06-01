@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { BsPlus } from "react-icons/bs";
+import { BsArrowLeft } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const StyledListsActions = styled.div`
   margin: 0 auto;
@@ -20,9 +21,11 @@ const StyledListsActions = styled.div`
 // type ListActionsProps = {};
 
 const ListsActions = () => {
+  const navigate = useNavigate();
+
   return (
     <StyledListsActions>
-      <BsPlus className="icon" size={40} />
+      <BsArrowLeft className="icon" size={40} onClick={() => navigate(-1)} />
     </StyledListsActions>
   );
 };

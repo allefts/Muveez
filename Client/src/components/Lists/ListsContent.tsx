@@ -43,8 +43,8 @@ const ListsContent = () => {
 
   return (
     <StyledListsContents>
-      {renderLists()}
       <NewListCard />
+      {renderLists()}
     </StyledListsContents>
   );
 };
