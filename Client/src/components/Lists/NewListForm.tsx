@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Mode } from "../../utils/types";
 import { createListFetcher } from "../../utils/helpers/serverFetcher";
 import LineError from "../Global/LineError";
+import { mutate } from "swr";
 
 const StyledNewListForm = styled.div`
   height: 100%;
@@ -69,6 +70,7 @@ const NewListForm = ({
     e.preventDefault();
     const res = await createListFetcher("/list", newListName);
     setError(res);
+    mutate("/user/lists");
     //call mutate to update data across app
   };
 
