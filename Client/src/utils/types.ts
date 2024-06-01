@@ -29,4 +29,13 @@ type ListWithMovies = {
   movies: Movie[];
 };
 
-export type { List, Movie, ListWithMovies, UserData };
+type Error = {
+  msg: string;
+};
+
+export enum Mode {
+  DEFAULT,
+  CREATING,
+}
+
+export type { Error, List, Movie, ListWithMovies, UserData };

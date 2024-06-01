@@ -33,7 +33,9 @@ const ListsContent = () => {
         <ListCard
           key={idx}
           list={list.list}
-          moviePosterUrl={list.movies[1].image_url}
+          moviePosterUrl={
+            list.movies.length ? list.movies[0].image_url : undefined
+          }
           numContents={list.movies.length}
         />
       );

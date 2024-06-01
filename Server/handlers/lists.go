@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/allefts/muveez_server/auth"
 	"github.com/allefts/muveez_server/store"
@@ -25,14 +26,41 @@ func NewListsService(store *store.Storage) *ListsService {
 func (s *ListsService) RegisterRoutes(r *chi.Mux, authHandler *auth.AuthHandler) {
 	r.Get("/user/lists", auth.RequireAuth(s.handleGetUserListsWithMovies, authHandler))
 	r.Get("/list/{id}", auth.RequireAuth(s.handleGetUserListWithMovies, authHandler))
-
+	r.Post("/list", auth.RequireAuth(s.handleCreateList, authHandler))
 }
 
-// Just Lists
-func (s *ListsService) handleGetUserLists(w http.ResponseWriter, r *http.Request) {
-	// session, _ := gothic.Store.Get(r, auth.SessionName)
-	// email := session.Values["email"].(string)
+func (s *ListsService) handleCreateList(w http.ResponseWriter, r *http.Request) {
+	//Parses form values
+	listName := r.FormValue("list_name")
+	userId, err := strconv.Atoi(r.FormValue("user_id"))
 
+	if err != nil {
+		log.Info(err)
+	}
+
+	//Checks if the user already has a list with that name
+	listNameAlreadyUsed, err := s.store.CheckForList(userId, listName)
+	if listNameAlreadyUsed {
+		utils.JSONResponse(w, "List already exists", http.StatusConflict)
+		return
+	}
+
+	if err != nil {
+		log.Info(err)
+		utils.JSONResponse(w, "Error creating new list", http.StatusInternalServerError)
+		return
+	}
+
+	//Creates list if no list found by that user
+	err = s.store.CreateList(userId, listName)
+
+	if err != nil {
+		log.Info(err)
+		utils.JSONResponse(w, "Error creating new list", http.StatusInternalServerError)
+		return
+	}
+
+	utils.JSONResponse(w, "Successfully created list", http.StatusCreated)
 }
 
 // List with movies by id
@@ -72,10 +100,6 @@ func (s *ListsService) handleGetUserListsWithMovies(w http.ResponseWriter, r *ht
 	}
 
 	utils.JSONResponse(w, lists, http.StatusOK)
-}
-
-func (s *ListsService) handleCreateList() {
-
 }
 
 func (s *ListsService) handleEditList() {

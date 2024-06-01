@@ -6,7 +6,7 @@ import ErrorPage from "./pages/Error";
 import LoginPage from "./pages/Login";
 import Layout from "./pages/Layout";
 import ProtectedPage from "./pages/Protected";
-import ListViewing from "./components/Lists/ListView";
+import ListView from "./components/Lists/ListView";
 import ListsContent from "./components/Lists/ListsContent";
 import { serverFetcher } from "./utils/helpers/serverFetcher";
 import ListsHeader from "./components/Lists/ListsHeader";
@@ -45,7 +45,7 @@ export const Router = createBrowserRouter([
               },
               {
                 path: "/lists/:id",
-                element: <ListViewing />,
+                element: <ListView />,
                 loader: async ({ params }) => {
                   return serverFetcher(`/list/${params["id"]}`);
                 },

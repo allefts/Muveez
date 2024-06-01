@@ -12,6 +12,10 @@ const ProtectedPage = () => {
     return <Navigate to="/login" />;
   }
 
+  if (!localStorage.getItem("wah")) {
+    localStorage.setItem("wah", user!.user_id.toString());
+  }
+
   return <Outlet />;
 };
 

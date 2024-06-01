@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/allefts/muveez_server/types"
+	"github.com/charmbracelet/log"
 	"github.com/markbates/goth"
 )
 
@@ -59,6 +60,7 @@ func (s *Storage) GetUserIDFromEmail(email string) (int, error) {
 
 }
 
+// GETS USER BY EMAIL
 func (s *Storage) GetUser(email string) (types.User, error) {
 	row, err := s.db.Query("SELECT * FROM users WHERE email = ? LIMIT 1", email)
 	if err != nil {
@@ -80,14 +82,16 @@ func (s *Storage) GetUser(email string) (types.User, error) {
 	return user, nil
 }
 
+// CHECKS FOR USER BY EMAIL
 func (s *Storage) IsThereUser(email string) bool {
 	row, _ := s.db.Query("SELECT * FROM users where email = ? LIMIT 1", email)
 	defer row.Close()
 	return row.Next()
 }
 
+// CREATES USER
 func (s *Storage) CreateUser(user goth.User) error {
-	_, err := s.db.Exec("INSERT INTO users (google_id, email, username, name, avatar_url) VALUES (?, ?, \"\", ?, ?)", user.UserID, user.Email, user.Name, user.AvatarURL)
+	_, err := s.db.Exec("INSERT INTO users (google_id, email, username, name, avatar_url) VALUES (?, ?, \"\", ?, ?);", user.UserID, user.Email, user.Name, user.AvatarURL)
 	if err != nil {
 		return err
 	}
@@ -96,82 +100,140 @@ func (s *Storage) CreateUser(user goth.User) error {
 }
 
 // **************LISTS**************
-func (s *Storage) GetUserListsWithMovies(userID int) ([]*types.ListsWithMovies, error) {
-	// rows, err := s.db.Query("SELECT * FROM lists where user_id = ?", userID)
-	rows, err := s.db.Query(`
-	SELECT movies.*, lists.* FROM lists
-	JOIN list_movies ON lists.list_id = list_movies.list_id 
-	JOIN movies ON movies.movie_id = list_movies.movie_id  
-	WHERE lists.user_id = ?;`, userID)
+// CHECKS FOR A LIST MADE BY A USER AND BY LIST NAME
+func (s *Storage) CheckForList(userID int, listName string) (bool, error) {
+	row, err := s.db.Query(`SELECT 1 FROM lists WHERE user_id = ? AND list_name = ?;`, userID, listName)
 
+	if err != nil {
+		return false, err
+	}
+
+	defer row.Close()
+
+	if row.Next() {
+		return true, fmt.Errorf("list name already exists")
+	}
+
+	return false, nil
+}
+
+// CREATES A LIST
+func (s *Storage) CreateList(userID int, listName string) error {
+	_, err := s.db.Exec(`INSERT INTO lists (user_id, list_name) VALUES (?, ?);`, userID, listName)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GET ALL USER LISTS
+func (s *Storage) GetUserLists(userID int) ([]types.List, error) {
+	rows, err := s.db.Query("SELECT * FROM lists where user_id = ?", userID)
+	if err != nil {
+		log.Info(err)
+	}
+
+	defer rows.Close()
+
+	var lists []types.List
+	for rows.Next() {
+		var list types.List
+		if err := rows.Scan(&list.ListID, &list.UserID, &list.ListName, &list.CreatedAt); err != nil {
+			return nil, err
+		}
+		lists = append(lists, list)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return lists, nil
+}
+
+// GET ALL USER LISTS WITH ALL MOVIES
+func (s *Storage) GetUserListsWithMovies(userID int) ([]types.ListsWithMovies, error) {
+	lists, err := s.GetUserLists(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	defer rows.Close()
-
-	listsMap := make(map[int]*types.ListsWithMovies)
-	//Loop through each row, scan into a temp movie and a temp listmovies. Sort movies into lists by list_id through map key.
-	for rows.Next() {
-		var movie types.Movie
-		listMovie := &types.ListsWithMovies{List: types.List{}, Movies: []types.Movie{}}
-
-		if err := rows.Scan(&movie.MovieId, &movie.TmdbId, &movie.Title, &movie.Overview, &movie.ReleaseDate, &movie.ImageURL, &listMovie.List.ListID, &listMovie.List.UserID, &listMovie.List.ListName, &listMovie.List.CreatedAt); err != nil {
+	var listsWithMovies []types.ListsWithMovies
+	for _, list := range lists {
+		movies, err := s.GetUserMoviesFromList(list.ListID)
+		if err != nil {
 			return nil, err
 		}
-
-		// listMovie.Movies = append(listMovie.Movies, movie)
-		if _, ok := listsMap[listMovie.List.ListID]; !ok {
-			listsMap[listMovie.List.ListID] = listMovie
-		}
-
-		//Structs inside maps cannot be modified directly
-		//Pointer so the listmap is also updated
-		listToAddTo := listsMap[listMovie.List.ListID]
-		listToAddTo.Movies = append(listToAddTo.Movies, movie)
+		listsWithMovies = append(listsWithMovies, types.ListsWithMovies{List: list, Movies: movies})
 	}
 
-	//Map listsMap to Slice
-	var listWithMoviesSlice []*types.ListsWithMovies
-	for _, list := range listsMap {
-		listWithMoviesSlice = append(listWithMoviesSlice, list)
-	}
-
-	return listWithMoviesSlice, nil
+	return listsWithMovies, nil
 }
 
-// Gets a users list with movies from a listID
-func (s *Storage) GetUserListMovie(listID string) (types.ListsWithMovies, error) {
-	listIdInt, err := strconv.Atoi(listID)
+// GET ALL MOVIES FROM A LIST BY ID
+func (s *Storage) GetUserMoviesFromList(listID int) ([]types.Movie, error) {
+	rows, err := s.db.Query(`SELECT movies.*
+	FROM movies
+	JOIN list_movies ON movies.movie_id = list_movies.movie_id
+	JOIN lists ON list_movies.list_id = lists.list_id
+	WHERE lists.list_id = ?`, listID)
 
 	if err != nil {
-		return types.ListsWithMovies{}, err
+		return nil, nil
 	}
-
-	rows, err := s.db.Query(`
-	SELECT lists.*, movies.*
-	FROM lists
-	JOIN list_movies ON lists.list_id = list_movies.list_id
-	JOIN movies ON movies.movie_id = list_movies.movie_id
-	WHERE lists.list_id = ?;`, listIdInt)
-
-	if err != nil {
-		return types.ListsWithMovies{}, err
-	}
-
 	defer rows.Close()
 
-	var list types.ListsWithMovies
+	// var movies []types.Movie
+	movies := []types.Movie{}
 	for rows.Next() {
 		var movie types.Movie
-		err = rows.Scan(&list.List.ListID, &list.List.UserID, &list.List.ListName, &list.List.CreatedAt, &movie.MovieId, &movie.TmdbId, &movie.Title, &movie.Overview, &movie.ReleaseDate, &movie.ImageURL)
-
-		list.Movies = append(list.Movies, movie)
+		if err := rows.Scan(&movie.MovieId, &movie.TmdbId, &movie.Title, &movie.Overview, &movie.ReleaseDate, &movie.ImageURL); err != nil {
+			return nil, err
+		}
+		movies = append(movies, movie)
 	}
 
+	return movies, nil
+}
+
+func (s *Storage) GetUserList(listID int) (types.List, error) {
+	row, err := s.db.Query("SELECT * FROM lists WHERE list_id = ?", listID)
+
 	if err != nil {
-		return types.ListsWithMovies{}, err
+		return types.List{}, err
+	}
+
+	defer row.Close()
+
+	if !row.Next() {
+		return types.List{}, fmt.Errorf("no row getuserlist")
+	}
+
+	list := types.List{}
+	if err := row.Scan(&list.ListID, &list.UserID, &list.ListName, &list.CreatedAt); err != nil {
+		return types.List{}, err
 	}
 
 	return list, nil
+}
+
+// GET JUST ONE LIST WITH ALL ITS MOVIES AND ALL LIST INFORMATION
+func (s *Storage) GetUserListMovie(listID string) (types.ListsWithMovies, error) {
+	listIdInt, err := strconv.Atoi(listID)
+	if err != nil {
+		return types.ListsWithMovies{}, err
+	}
+
+	list, err := s.GetUserList(listIdInt)
+	if err != nil {
+		return types.ListsWithMovies{}, err
+	}
+
+	movies, err := s.GetUserMoviesFromList(listIdInt)
+	if err != nil {
+		return types.ListsWithMovies{}, err
+	}
+
+	return types.ListsWithMovies{List: list, Movies: movies}, nil
 }

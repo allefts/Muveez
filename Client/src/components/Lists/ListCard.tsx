@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const StyledListCard = styled.div`
   width: 100%;
   height: 450px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
   border-radius: 1rem;
   overflow: hidden;
   position: relative;
@@ -65,13 +65,13 @@ const StyledListCard = styled.div`
 
 type ListCardProps = {
   list: List;
-  moviePosterUrl: string;
+  moviePosterUrl?: string;
   numContents: number;
 };
 
 const ListCard = ({
   list,
-  moviePosterUrl = "",
+  moviePosterUrl = "https://subscoop.com/asset/placeholder.jpg",
   numContents = 0,
 }: ListCardProps) => {
   return (

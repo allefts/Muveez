@@ -30,7 +30,7 @@ const ListView = () => {
   const { list, movies } = useLoaderData() as ListWithMovies;
 
   //List not found
-  if (list.list_id === 0 && !movies) {
+  if (list.list_id === 0) {
     return <Navigate to="/lists" replace={true} />;
   }
 
