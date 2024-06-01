@@ -9,7 +9,6 @@ const StyledNewListCard = styled.div`
   display: grid;
   border-radius: 1rem;
   place-items: center;
-  cursor: pointer;
 
   border: 2px solid ${({ theme }) => theme.primary};
   color: ${({ theme }) => theme.primary};
