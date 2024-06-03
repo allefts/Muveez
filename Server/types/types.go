@@ -44,6 +44,11 @@ type ListMovie struct {
 	MovieId int `json:"movie_id" db:"movie_id"`
 }
 
+type ListMovieIDS struct {
+	ListId  int `json:"list_id" db:"list_id"`
+	MovieId int `json:"movie_id" db:"movie_id"`
+}
+
 type Error struct {
 	Message string `json:"message"`
 }

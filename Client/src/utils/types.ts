@@ -37,5 +37,9 @@ export enum Mode {
   DEFAULT,
   CREATING,
 }
+export enum View {
+  FANCY,
+  COMPACT,
+}
 
 export type { Error, List, Movie, ListWithMovies, UserData };

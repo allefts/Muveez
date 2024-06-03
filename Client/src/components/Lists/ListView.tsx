@@ -4,23 +4,19 @@ import { ListWithMovies } from "../../utils/types";
 import ListViewMoviesContainer from "./ListViewMoviesContainer";
 import ListViewCard from "./ListViewCard";
 import { toWrittenDate } from "../../utils/helpers/toDate";
+import ListViewSelector from "./ListViewSelector";
 
 const StyledListView = styled.div`
-  // width: 1400px;
-  margin: 0 auto;
-
   .list_metadata {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 2rem;
   }
 
   .list_title {
     text-align: center;
     font-size: 3rem;
-  }
-
-  .list_createdAt {
   }
 `;
 
@@ -48,6 +44,7 @@ const ListView = () => {
           </p>
         </div>
       </div>
+      <ListViewSelector />
       <ListViewMoviesContainer>
         {renderListWithMovies()}
       </ListViewMoviesContainer>

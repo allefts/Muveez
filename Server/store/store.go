@@ -127,6 +127,17 @@ func (s *Storage) CreateList(userID int, listName string) error {
 	return nil
 }
 
+// REMOVES A MOVIE FROM A LIST
+func (s *Storage) DeleteMovieFromList(listID int, movieID int) error {
+	_, err := s.db.Exec(`DELETE FROM list_movies WHERE list_id = ? AND movie_id = ?;`, listID, movieID)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // GET ALL USER LISTS
 func (s *Storage) GetUserLists(userID int) ([]types.List, error) {
 	rows, err := s.db.Query("SELECT * FROM lists where user_id = ?", userID)

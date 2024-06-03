@@ -49,6 +49,7 @@ export const Router = createBrowserRouter([
                 loader: async ({ params }) => {
                   return serverFetcher(`/list/${params["id"]}`);
                 },
+                errorElement: <ErrorPage />,
               },
             ],
           },

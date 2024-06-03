@@ -70,8 +70,9 @@ const NewListForm = ({
     e.preventDefault();
     const res = await createListFetcher("/list", newListName);
     setError(res);
+    //refreshes data across app
     mutate("/user/lists");
-    //call mutate to update data across app
+    setMode(Mode.DEFAULT);
   };
 
   return (
@@ -93,6 +94,8 @@ const NewListForm = ({
           onChange={(e) => setNewListName(e.target.value)}
           autoFocus={true}
           required={true}
+          minLength={1}
+          maxLength={25}
           min={1}
           max={25}
         />

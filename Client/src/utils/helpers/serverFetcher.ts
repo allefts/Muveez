@@ -42,6 +42,28 @@ const createListFetcher = async (url: string, listName: string | undefined) => {
     }
   }
 };
+
+const deleteListFetcher = async (
+  url: string,
+  listId: number,
+  movieId: number
+) => {
+  const wah = localStorage.getItem("wah");
+  if (wah) {
+    try {
+      const res = await serverAPI.delete(url, {
+        data: { list_id: listId, user_id: wah, movie_id: movieId },
+      });
+      if (res.status === 200) {
+        return true;
+      }
+    } catch (err) {
+      return false;
+    }
+  }
+  return false;
+};
+
 //HOOK to get current user
 const useUser = () => {
   const { data, isLoading, error } = useSWRImmutable("/user", serverFetcher);
@@ -82,6 +104,7 @@ const useAllUserListsWithMovies = () => {
 };
 
 export {
+  deleteListFetcher,
   createListFetcher,
   useListWithMovies,
   useAllUserListsWithMovies,
