@@ -7,6 +7,8 @@ import { toWrittenDate } from "../../utils/helpers/toDate";
 import ListViewSelector from "./ListViewSelector";
 
 const StyledListView = styled.div`
+  margin: 0 4rem;
+
   .list_metadata {
     display: flex;
     justify-content: space-between;

@@ -12,7 +12,12 @@ const DiscoverPage = () => {
     <StyledDiscoverPage>
       <SearchBar />
       {movies.map((movie, idx) => {
-        return <div key={idx}></div>;
+        return (
+          <div key={idx}>
+            {movie.title}
+            <img src={movie.image_url} height={100} width={100} />
+          </div>
+        );
       })}
     </StyledDiscoverPage>
   );
