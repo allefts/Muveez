@@ -30,6 +30,9 @@ const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
   if (user)
     return (
       <StyledNavItems>
+        <Link className="lists_link" to="/discover">
+          Discover
+        </Link>
         <Link className="lists_link" to="/lists">
           Lists
         </Link>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledErrorPage = styled.div`
+const StyledErrorPage = styled.section`
   display: grid;
   place-items: center;
   padding: 2rem;

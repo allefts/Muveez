@@ -2,7 +2,7 @@ import styled from "styled-components";
 import LoginForm from "../components/Login/LoginForm";
 import { FadeIn } from "../utils/styles/Keyframes";
 
-const StyledLoginPage = styled.div`
+const StyledLoginPage = styled.section`
   height: 90vh;
   display: flex;
   justify-content: center;

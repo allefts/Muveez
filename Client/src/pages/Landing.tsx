@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledLandingPage = styled.div`
+const StyledLandingPage = styled.section`
   padding: 0 2rem;
 `;
 

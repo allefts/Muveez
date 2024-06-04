@@ -24,6 +24,15 @@ type Movie = {
   image_url: string;
 };
 
+type FetchedMovie = {
+  tmdb_id: number;
+  title: string;
+  overview: string;
+  release_date: string;
+  image_url: string;
+  popularity: number;
+};
+
 type ListWithMovies = {
   list: List;
   movies: Movie[];
@@ -42,4 +51,4 @@ export enum View {
   COMPACT,
 }
 
-export type { Error, List, Movie, ListWithMovies, UserData };
+export type { Error, List, FetchedMovie, Movie, ListWithMovies, UserData };

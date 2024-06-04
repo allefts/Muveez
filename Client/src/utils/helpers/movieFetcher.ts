@@ -1,5 +1,6 @@
 import axios from "axios";
 import useSWR from "swr";
+import { FetchedMovie } from "../types";
 
 // const POSTER_IMAGE_ENDPOINT = "https://image.tmdb.org/t/p/original/";
 
@@ -19,12 +20,30 @@ const movieFetcher = (url: string) => movieAPI.get(url).then((res) => res.data);
 //     .then((res) => console.log(res));
 // };
 
+const getPopularMovies = async () => {
+  const res = await movieFetcher("/movie/popular?language=en-US&page=1");
+  if (res.results) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return res.results.map((movie: any) => {
+      const fetchedMovie: FetchedMovie = {
+        tmdb_id: movie.id,
+        title: movie.title,
+        overview: movie.overview,
+        popularity: movie.popularity,
+        release_date: movie.release_date,
+        image_url: "https://image.tmdb.org/t/p/original" + movie.poster_path,
+      };
+      return fetchedMovie;
+    });
+  }
+  return [] as Partial<FetchedMovie>;
+};
+
 //GETS *TRENDING* MOVIES FROM API
-//!!!!! LOTS OF DATA
 const useGetDiscoverMovies = () => {
   const { data, isLoading, error } = useSWR("/discover/movie", movieFetcher);
 
   return { data, isLoading, error };
 };
 
-export { useGetDiscoverMovies, movieFetcher };
+export { getPopularMovies, useGetDiscoverMovies, movieFetcher };

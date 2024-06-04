@@ -69,7 +69,7 @@ const SearchBar = ({ placeholder = "Search..." }) => {
         style={{ display: "flex", alignItems: "center" }}
         className="search_btn"
       >
-        <BsSearch size="1rem" />
+        <BsSearch size={15.5} />
       </button>
     </StyledSearchBar>
   );

@@ -82,7 +82,7 @@ type ListViewCardProps = {
 
 const ListViewCard = ({ movie }: ListViewCardProps) => {
   const listId = useParams()["id"];
-  let revalidator = useRevalidator();
+  const revalidator = useRevalidator();
 
   const handleDeleteMovieFromList = async () => {
     const res = await deleteListFetcher(

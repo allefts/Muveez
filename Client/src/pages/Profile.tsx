@@ -3,7 +3,7 @@ import EditForm from "../components/Profile/EditForm";
 import { useUser } from "../utils/helpers/serverFetcher";
 import { useState } from "react";
 
-const StyledProfilePage = styled.div`
+const StyledProfilePage = styled.section`
   margin-top: 5rem;
   padding: 0 2rem;
 
