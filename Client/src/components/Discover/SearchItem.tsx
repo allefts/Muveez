@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FetchedMovie } from "../../utils/types";
 import { BsFillStarFill, BsPlus } from "react-icons/bs";
+import { useParams } from "react-router-dom";
 
 type SearchItemProps = {
   movie: FetchedMovie;
@@ -18,7 +19,6 @@ const StyledSearchItem = styled.div`
   }
 
   .movie_information {
-    flex: 15;
     width: 100%;
 
     .movie_metadata {
@@ -59,7 +59,6 @@ const StyledSearchItem = styled.div`
   }
 
   .add_movie_btn {
-    flex: 5;
     display: grid;
     place-items: center;
     outline: none;
@@ -83,6 +82,11 @@ const StyledSearchItem = styled.div`
 `;
 
 const SearchItem = ({ movie }: SearchItemProps) => {
+  //list id
+  const { id } = useParams();
+
+  const addMovieToList = () => {};
+
   return (
     <StyledSearchItem>
       <img
@@ -109,7 +113,7 @@ const SearchItem = ({ movie }: SearchItemProps) => {
         </div>
         <p className="movie_overview">{movie.overview}</p>
       </div>
-      <button className="add_movie_btn">
+      <button className="add_movie_btn" onClick={addMovieToList}>
         <BsPlus size={40} />
       </button>
     </StyledSearchItem>

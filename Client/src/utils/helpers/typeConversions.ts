@@ -30,6 +30,17 @@ const toMovie = (obj: any) => {
   movie.overview = obj["overview"];
   movie.release_date = obj["release_date"];
   movie.image_url = obj["image_url"];
+  return toMovie;
+};
+
+const toMovieFromTMDB = (obj: any) => {
+  const movie = {} as Movie;
+  movie.tmdb_id = obj["id"];
+  movie.title = obj["title"];
+  movie.overview = obj["overview"];
+  movie.release_date = obj["release_date"];
+  movie.image_url = obj["image_url"];
+  return movie;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -53,4 +64,4 @@ const parseMoviesFromTMDB = (movies: any[]) => {
   return moviesInfo;
 };
 
-export { parseMoviesFromTMDB, toList, toMovie, toUser };
+export { parseMoviesFromTMDB, toList, toMovieFromTMDB, toMovie, toUser };

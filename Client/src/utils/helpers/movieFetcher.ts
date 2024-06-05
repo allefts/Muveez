@@ -43,7 +43,9 @@ const getPopularMovies = async () => {
 //SEARCH FOR MOVIES
 const useSearchForMovies = (searchValue: string) => {
   const { data, isLoading, error } = useSWRImmutable(
-    `/search/movie?include_adult=false&language=en-US&page=1&query=${searchValue}`,
+    searchValue
+      ? `/search/movie?include_adult=false&language=en-US&page=1&query=${searchValue}`
+      : null,
     movieFetcher
   );
 

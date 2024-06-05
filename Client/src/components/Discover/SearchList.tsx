@@ -11,6 +11,7 @@ const StyledSearchList = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 2rem;
+  overflow: auto;
 `;
 
 const SearchList = ({ debouncedSearchValue }: SearchListProps) => {

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { BsSearch } from "react-icons/bs";
-import { SetURLSearchParams } from "react-router-dom";
+import { Dispatch, SetStateAction } from "react";
 
 const StyledSearchBar = styled.div`
   display: flex;
@@ -44,23 +44,16 @@ const StyledSearchBar = styled.div`
 `;
 
 type SearchBarProps = {
-  searchValue: string;
-  setSearchValue: SetURLSearchParams;
+  setSearchValue: Dispatch<SetStateAction<string>>;
 };
 
-const SearchBar = ({ searchValue, setSearchValue }: SearchBarProps) => {
+const SearchBar = ({ setSearchValue }: SearchBarProps) => {
   return (
     <StyledSearchBar>
       <input
         className="search_inpt"
         type="text"
-        value={searchValue}
-        onChange={(e) =>
-          setSearchValue((prev) => {
-            prev.set("q", e.target.value);
-            return prev;
-          })
-        }
+        onChange={(e) => setSearchValue(e.target.value)}
         placeholder="Bee Movie"
         autoFocus
       />

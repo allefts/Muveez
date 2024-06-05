@@ -1,6 +1,8 @@
-import { useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { useDebounce } from "../../utils/hooks/useDebounce";
+import SearchBar from "../Navbar/Search";
+import SearchList from "../Discover/SearchList";
 
 type DialogModalProps = {
   isOpen: string;
@@ -17,15 +19,25 @@ const StyledDialog = styled.dialog`
   border-radius: 0.5rem;
   z-index: 10;
   width: 800px;
+  background: ${({ theme }) => theme.body};
+  color: ${({ theme }) => theme.text};
+  border: none;
+
+  height: 600px;
 
   &::backdrop {
     backdrop-filter: blur(1px);
   }
+
+  .modal_title {
+    text-align: center;
+  }
 `;
 
 const DialogModal = ({ isOpen, onClose }: DialogModalProps) => {
-  //for query params
-  const [searchParams, setSearchParams] = useSearchParams({ q: "" });
+  const [searchValue, setSearchValue] = useState<string>("");
+  const debouncedSearchValue = useDebounce(searchValue);
+
   //ref for modal
   const dialogRef = useRef<null | HTMLDialogElement>(null);
 
@@ -35,32 +47,20 @@ const DialogModal = ({ isOpen, onClose }: DialogModalProps) => {
       dialogRef.current?.showModal();
     } else {
       dialogRef.current?.close();
+      setSearchValue("");
     }
-  });
+  }, [isOpen]);
 
   const closeModal = () => {
+    setSearchValue("");
     onClose();
   };
 
   return (
-    <StyledDialog
-      ref={dialogRef}
-      className="add_modal"
-      onClose={() => onClose()}
-    >
-      <h4>Title</h4>
-      <input
-        type="text"
-        onChange={(e) =>
-          setSearchParams((prev) => {
-            prev.set("q", e.target.value);
-            return prev;
-          })
-        }
-        value={searchParams.get("q") ?? ""}
-      />
-
-      <button onClick={closeModal}>Close</button>
+    <StyledDialog ref={dialogRef} className="add_modal" onClose={closeModal}>
+      <h1 className="modal_title">Add Movies</h1>
+      <SearchBar setSearchValue={setSearchValue} />
+      <SearchList debouncedSearchValue={debouncedSearchValue} />
       <button>Ok</button>
     </StyledDialog>
   );

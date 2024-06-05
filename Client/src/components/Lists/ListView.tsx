@@ -34,13 +34,13 @@ const ListView = () => {
 
   //Opens modal
   const handleOpenModal = () => {
-    setSearchParams({ dia: "y" });
+    setSearchParams({ dia: "y" }, { replace: true });
   };
 
   //runs after modal closes, cleanup function
   const onClose = () => {
     //remove all params we placed
-    setSearchParams("");
+    setSearchParams({ dia: "n" }, { replace: true });
   };
 
   const onOk = () => {};
