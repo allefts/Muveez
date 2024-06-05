@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { BsSearch } from "react-icons/bs";
-// import { useState } from "react";
+import { SetURLSearchParams } from "react-router-dom";
 
 const StyledSearchBar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  margin-bottom: 2rem;
 
   .search_inpt {
     width: 350px;
@@ -42,28 +43,26 @@ const StyledSearchBar = styled.div`
   }
 `;
 
-const SearchBar = ({ placeholder = "Search..." }) => {
-  // const [searchQuery, setSearchQuery] = useState("");
+type SearchBarProps = {
+  searchValue: string;
+  setSearchValue: SetURLSearchParams;
+};
 
-  // const handleChange = (e) => {
-  //   e.preventDefault();
-  //   setSearchQuery(e.target.value);
-  // };
-
-  // const handleSearch = () => {
-  //   if (onSearch) {
-  //     onSearch(query);
-  //   }
-  // };
-
+const SearchBar = ({ searchValue, setSearchValue }: SearchBarProps) => {
   return (
     <StyledSearchBar>
       <input
         className="search_inpt"
         type="text"
-        // value={searchQuery}
-        // onChange={handleChange}
-        placeholder={placeholder}
+        value={searchValue}
+        onChange={(e) =>
+          setSearchValue((prev) => {
+            prev.set("q", e.target.value);
+            return prev;
+          })
+        }
+        placeholder="Bee Movie"
+        autoFocus
       />
       <button
         style={{ display: "flex", alignItems: "center" }}

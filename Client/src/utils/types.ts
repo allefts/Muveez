@@ -25,11 +25,11 @@ type Movie = {
 };
 
 type FetchedMovie = {
-  tmdb_id: number;
   title: string;
   overview: string;
   release_date: string;
   image_url: string;
+  tmdb_id: number;
   popularity: number;
 };
 

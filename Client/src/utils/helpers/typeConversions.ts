@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { List, Movie, UserData } from "../types";
+import { FetchedMovie, List, Movie, UserData } from "../types";
 
 const toUser = (obj: any) => {
   const user = {} as UserData;
@@ -32,4 +32,25 @@ const toMovie = (obj: any) => {
   movie.image_url = obj["image_url"];
 };
 
-export { toList, toMovie, toUser };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const parseMoviesFromTMDB = (movies: any[]) => {
+  // https://image.tmdb.org/t/p/original
+  const moviesInfo = movies
+    .map((movie: any) => {
+      return {
+        image_url: movie.poster_path
+          ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+          : "",
+        title: movie.title,
+        overview: movie.overview,
+        release_date: movie.release_date,
+        tmdb_id: movie.id,
+        popularity: Math.floor(movie.popularity),
+      } as FetchedMovie;
+    })
+    .sort((a, b) => b.popularity - a.popularity);
+
+  return moviesInfo;
+};
+
+export { parseMoviesFromTMDB, toList, toMovie, toUser };

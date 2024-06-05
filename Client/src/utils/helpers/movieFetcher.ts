@@ -1,6 +1,7 @@
 import axios from "axios";
-import useSWR from "swr";
 import { FetchedMovie } from "../types";
+import useSWRImmutable from "swr/immutable";
+import { parseMoviesFromTMDB } from "./typeConversions";
 
 // const POSTER_IMAGE_ENDPOINT = "https://image.tmdb.org/t/p/original/";
 
@@ -39,11 +40,34 @@ const getPopularMovies = async () => {
   return [] as Partial<FetchedMovie>;
 };
 
+//SEARCH FOR MOVIES
+const useSearchForMovies = (searchValue: string) => {
+  const { data, isLoading, error } = useSWRImmutable(
+    `/search/movie?include_adult=false&language=en-US&page=1&query=${searchValue}`,
+    movieFetcher
+  );
+
+  if (data) {
+    const parsedMovies = parseMoviesFromTMDB(data.results);
+    return { data: parsedMovies, isLoading, isError: error };
+  }
+
+  return { data: null, isLoading, isError: error };
+};
+
 //GETS *TRENDING* MOVIES FROM API
 const useGetDiscoverMovies = () => {
-  const { data, isLoading, error } = useSWR("/discover/movie", movieFetcher);
+  const { data, isLoading, error } = useSWRImmutable(
+    "/discover/movie",
+    movieFetcher
+  );
 
   return { data, isLoading, error };
 };
 
-export { getPopularMovies, useGetDiscoverMovies, movieFetcher };
+export {
+  getPopularMovies,
+  useSearchForMovies,
+  useGetDiscoverMovies,
+  movieFetcher,
+};

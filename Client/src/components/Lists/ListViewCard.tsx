@@ -5,6 +5,7 @@ import { deleteListFetcher } from "../../utils/helpers/serverFetcher";
 import { useParams, useRevalidator } from "react-router-dom";
 
 const StyledListViewCard = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);

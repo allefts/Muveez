@@ -1,24 +1,24 @@
 import styled from "styled-components";
 import SearchBar from "../components/Navbar/Search";
-import { useLoaderData } from "react-router-dom";
-import { FetchedMovie } from "../utils/types";
+import { useDebounce } from "../utils/hooks/useDebounce";
+import SearchList from "../components/Discover/SearchList";
+import { useSearchParams } from "react-router-dom";
 
-const StyledDiscoverPage = styled.section``;
+const StyledDiscoverPage = styled.section`
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+`;
 
 const DiscoverPage = () => {
-  const movies = useLoaderData() as FetchedMovie[];
+  const [searchValue, setSearchValue] = useSearchParams({ q: " " });
+  const q = searchValue.get("q");
+  const debouncedSearchValue = useDebounce(q!);
 
   return (
     <StyledDiscoverPage>
-      <SearchBar />
-      {movies.map((movie, idx) => {
-        return (
-          <div key={idx}>
-            {movie.title}
-            <img src={movie.image_url} height={100} width={100} />
-          </div>
-        );
-      })}
+      <SearchBar searchValue={q!} setSearchValue={setSearchValue} />
+      <SearchList debouncedSearchValue={debouncedSearchValue} />
     </StyledDiscoverPage>
   );
 };
