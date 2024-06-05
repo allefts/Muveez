@@ -16,6 +16,8 @@ const StyledListsContents = styled.div`
   align-items: center;
 `;
 
+//REFACTOR
+//ONLY FETCH LISTS NOT MOVIES INSIDE THEM.
 const ListsContent = () => {
   const { lists, isLoading, isError } = useAllUserListsWithMovies();
 

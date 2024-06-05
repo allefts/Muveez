@@ -1,10 +1,11 @@
-import { Navigate, useLoaderData } from "react-router-dom";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { ListWithMovies } from "../../utils/types";
 import ListViewMoviesContainer from "./ListViewMoviesContainer";
 import ListViewCard from "./ListViewCard";
 import { toWrittenDate } from "../../utils/helpers/toDate";
 import ListViewSelector from "./ListViewSelector";
+import DialogModal from "../Global/DialogModal";
 
 const StyledListView = styled.div`
   margin: 0 4rem;
@@ -26,17 +27,35 @@ const StyledListView = styled.div`
 
 const ListView = () => {
   const { list, movies } = useLoaderData() as ListWithMovies;
+  //Start a new search param with dia set to no
+  const [searchParams, setSearchParams] = useSearchParams({ dia: "n" });
+  //Get dia
+  const modalOpen = searchParams.get("dia")!;
 
-  //List not found
-  if (list.list_id === 0) {
-    return <Navigate to="/lists" replace={true} />;
-  }
+  //Opens modal
+  const handleOpenModal = () => {
+    setSearchParams({ dia: "y" });
+  };
+
+  //runs after modal closes, cleanup function
+  const onClose = () => {
+    //remove all params we placed
+    setSearchParams("");
+  };
+
+  const onOk = () => {};
 
   const renderListWithMovies = () =>
     movies.map((movie, idx) => <ListViewCard key={idx} movie={movie} />);
 
   return (
     <StyledListView>
+      <DialogModal
+        onClose={onClose}
+        onOk={onOk}
+        children={undefined}
+        isOpen={modalOpen}
+      />
       <div className="list_metadata">
         <h1 className="list_title">{list.list_name}</h1>
         <div>
@@ -46,7 +65,7 @@ const ListView = () => {
           </p>
         </div>
       </div>
-      <ListViewSelector />
+      <ListViewSelector handleOpenModal={handleOpenModal} />
       <ListViewMoviesContainer>
         {renderListWithMovies()}
       </ListViewMoviesContainer>

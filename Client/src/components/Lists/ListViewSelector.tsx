@@ -49,10 +49,14 @@ const StyledListViewSelector = styled.div`
   }
 `;
 
-const ListViewSelector = () => {
+type ListViewSelectorProps = {
+  handleOpenModal: () => void;
+};
+
+const ListViewSelector = ({ handleOpenModal }: ListViewSelectorProps) => {
   return (
     <StyledListViewSelector>
-      <button className="add_movies_btn">
+      <button className="add_movies_btn" onClick={handleOpenModal}>
         <BsPlus size={36} />
       </button>
       <div className="right_content">
