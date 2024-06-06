@@ -78,9 +78,15 @@ const addMovieToListFetcher = async (url: string, movie: FetchedMovie) => {
     const res = await serverAPI.post(url, {
       ...dbMovie,
     });
+
+    if (res.status === 200) {
+      return true;
+    }
   } catch (err) {
     return false;
   }
+
+  return false;
 };
 
 //HOOK to get current user

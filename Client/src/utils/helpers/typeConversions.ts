@@ -46,22 +46,22 @@ const toMovieFromTMDB = (obj: any) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const parseMoviesFromTMDB = (movies: any[]) => {
   // https://image.tmdb.org/t/p/original
-  const moviesInfo = movies
-    .map((movie: any) => {
-      return {
-        image_url: movie.poster_path
-          ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-          : "",
+  const moviesInfo: FetchedMovie[] = [];
+  //Only add movie if there is a poster image
+  movies.forEach((movie) => {
+    if (movie.poster_path) {
+      moviesInfo.push({
+        image_url: `https://image.tmdb.org/t/p/original${movie.poster_path}`,
         title: movie.title,
         overview: movie.overview,
         release_date: movie.release_date,
         tmdb_id: movie.id,
         popularity: Math.floor(movie.popularity),
-      } as FetchedMovie;
-    })
-    .sort((a, b) => b.popularity - a.popularity);
+      });
+    }
+  });
 
-  return moviesInfo;
+  return moviesInfo.sort((a, b) => b.popularity - a.popularity);
 };
 
 export { parseMoviesFromTMDB, toList, toMovieFromTMDB, toMovie, toUser };

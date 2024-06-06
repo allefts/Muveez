@@ -36,7 +36,7 @@ export const GlobalStyle = createGlobalStyle`
     color: inherit;
 
     &:hover {
-      text-decoration: underline;
+      // text-decoration: underline;
     }
 
   }
@@ -48,5 +48,26 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0.5rem 1rem;
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
+  }
+
+  dialog {
+    display: none;
+    opacity: 0;
+    transform: translateY(300px);
+    transition-property: display opacity transform;
+    transition-duration: 300ms;
+    transition-behavior: allow-discrete;
+    
+  }
+  
+  dialog[open] {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    
+    @starting-style {
+      transform: translateY(300px);
+      opacity: 0;
+    }
   }
 `;

@@ -2,13 +2,12 @@ import { useLoaderData, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { ListWithMovies } from "../../utils/types";
 import ListViewMoviesContainer from "./ListViewMoviesContainer";
-import ListViewCard from "./ListViewCard";
 import { toWrittenDate } from "../../utils/helpers/toDate";
 import ListViewSelector from "./ListViewSelector";
 import DialogModal from "../Global/DialogModal";
 
 const StyledListView = styled.div`
-  margin: 0 4rem;
+  margin: 0 2rem;
 
   .list_metadata {
     display: flex;
@@ -28,34 +27,61 @@ const StyledListView = styled.div`
 const ListView = () => {
   const { list, movies } = useLoaderData() as ListWithMovies;
   //Start a new search param with dia set to no
-  const [searchParams, setSearchParams] = useSearchParams({ dia: "n" });
+  const [searchParams, setSearchParams] = useSearchParams({
+    dia: "n",
+    sort: "compact",
+  });
   //Get dia
   const modalOpen = searchParams.get("dia")!;
+  const listStyle = searchParams.get("sort")!;
 
   //Opens modal
   const handleOpenModal = () => {
-    setSearchParams({ dia: "y" }, { replace: true });
+    setSearchParams(
+      (prev) => {
+        prev.set("dia", "y");
+        return prev;
+      },
+      { replace: true }
+    );
+  };
+
+  const handleToggleSort = (srt: string) => {
+    if (srt === "FANCY") {
+      setSearchParams(
+        (prev) => {
+          prev.set("sort", "fanc");
+          return prev;
+        },
+        { replace: true }
+      );
+      setSearchParams(searchParams);
+    } else if (srt === "COMPACT") {
+      setSearchParams(
+        (prev) => {
+          prev.set("sort", "comp");
+          return prev;
+        },
+        { replace: true }
+      );
+    }
   };
 
   //runs after modal closes, cleanup function
   const onClose = () => {
     //remove all params we placed
-    setSearchParams({ dia: "n" }, { replace: true });
+    setSearchParams(
+      (prev) => {
+        prev.set("dia", "n");
+        return prev;
+      },
+      { replace: true }
+    );
   };
-
-  const onOk = () => {};
-
-  const renderListWithMovies = () =>
-    movies.map((movie, idx) => <ListViewCard key={idx} movie={movie} />);
 
   return (
     <StyledListView>
-      <DialogModal
-        onClose={onClose}
-        onOk={onOk}
-        children={undefined}
-        isOpen={modalOpen}
-      />
+      <DialogModal onClose={onClose} children={undefined} isOpen={modalOpen} />
       <div className="list_metadata">
         <h1 className="list_title">{list.list_name}</h1>
         <div>
@@ -65,10 +91,12 @@ const ListView = () => {
           </p>
         </div>
       </div>
-      <ListViewSelector handleOpenModal={handleOpenModal} />
-      <ListViewMoviesContainer>
-        {renderListWithMovies()}
-      </ListViewMoviesContainer>
+      <ListViewSelector
+        handleOpenModal={handleOpenModal}
+        handleToggleSort={handleToggleSort}
+        listStyle={listStyle}
+      />
+      <ListViewMoviesContainer listStyle={listStyle} movies={movies} />
     </StyledListView>
   );
 };

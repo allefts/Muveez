@@ -70,7 +70,7 @@ func (s *ListsService) handleAddMovieToList(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	utils.JSONResponse(w, "Movie added", http.StatusCreated)
+	utils.JSONResponse(w, "Movie added", http.StatusOK)
 }
 
 func (s *ListsService) handleDeleteList(w http.ResponseWriter, r *http.Request) {

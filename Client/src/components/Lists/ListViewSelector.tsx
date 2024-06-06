@@ -1,7 +1,7 @@
 import { BsGrid3X2, BsListOl, BsPlus } from "react-icons/bs";
 import styled from "styled-components";
 
-const StyledListViewSelector = styled.div`
+const StyledListViewSelector = styled.div<{ $listStyle: string }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -33,6 +33,17 @@ const StyledListViewSelector = styled.div`
   .right_content {
     display: flex;
 
+    .fancy_btn {
+      background: ${({ theme, $listStyle }) =>
+        $listStyle === "fanc" ? theme.background : "transparent"};
+      margin-right: 0.25rem;
+    }
+
+    .compact_btn {
+      background: ${({ theme, $listStyle }) =>
+        $listStyle === "comp" ? theme.background : "transparent"};
+    }
+
     .fancy_btn,
     .compact_btn {
       padding: 4px;
@@ -42,28 +53,42 @@ const StyledListViewSelector = styled.div`
       align-items: center;
       justify-content: center;
       outline: none;
-      background: none;
       border: 1px solid ${({ theme }) => theme.background};
       color: ${({ theme }) => theme.primary};
+
+      transition: all 300ms ease;
+
+      &:hover {
+        background: ${({ theme }) => theme.background};
+      }
     }
   }
 `;
 
 type ListViewSelectorProps = {
   handleOpenModal: () => void;
+  handleToggleSort: (srt: string) => void;
+  listStyle: string;
 };
 
-const ListViewSelector = ({ handleOpenModal }: ListViewSelectorProps) => {
+const ListViewSelector = ({
+  handleOpenModal,
+  handleToggleSort,
+  listStyle,
+}: ListViewSelectorProps) => {
   return (
-    <StyledListViewSelector>
+    <StyledListViewSelector $listStyle={listStyle}>
       <button className="add_movies_btn" onClick={handleOpenModal}>
         <BsPlus size={36} />
       </button>
       <div className="right_content">
-        <button className="fancy_btn">
+        <button className="fancy_btn" onClick={() => handleToggleSort("FANCY")}>
           <BsGrid3X2 size={24} />
         </button>
-        <button className="compact_btn">
+        <button
+          className="compact_btn"
+          onClick={() => handleToggleSort("COMPACT")}
+        >
           <BsListOl size={24} />
         </button>
       </div>

@@ -105,8 +105,8 @@ func (s *SQLiteStorage) createListMoviesTable() error {
 		list_id INTEGER NOT NULL,
 		movie_id INTEGER NOT NULL,
 		
-		FOREIGN KEY (list_id) REFERENCES lists(list_id),
-		FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
+		FOREIGN KEY (list_id) REFERENCES lists(list_id) ON DELETE CASCADE,
+		FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
 		PRIMARY KEY (list_id, movie_id)
 	);
 	`)

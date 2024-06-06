@@ -8,7 +8,6 @@ import { BsX } from "react-icons/bs";
 type DialogModalProps = {
   isOpen: string;
   onClose: () => void;
-  onOk: () => void;
   children: React.ReactNode;
 };
 

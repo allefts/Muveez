@@ -138,6 +138,28 @@ func (s *Storage) DeleteMovieFromList(listID int, movieID int) error {
 	return nil
 }
 
+// Get movie from moviedb
+func (s *Storage) GetMovie(tmdbID int) (int64, error) {
+	row, err := s.db.Query(`SELECT movie_id FROM movies WHERE tmdb_id = ?`, tmdbID)
+	if err != nil {
+		return 0, err
+	}
+
+	defer row.Close()
+
+	if !row.Next() {
+		return 0, fmt.Errorf("no user found")
+	}
+
+	var movieID int
+	err = row.Scan(&movieID)
+	if err != nil {
+		return 0, err
+	}
+
+	return int64(movieID), nil
+}
+
 // GET ALL USER LISTS
 func (s *Storage) GetUserLists(userID int) ([]types.List, error) {
 	rows, err := s.db.Query("SELECT * FROM lists where user_id = ?", userID)
@@ -238,9 +260,24 @@ func (s *Storage) AddMovieToList(listID string, movie types.Movie) error {
 		return err
 	}
 
-	newMovieId, err := res.LastInsertId()
+	rowsAffected, err := res.RowsAffected()
 	if err != nil {
 		return err
+	}
+
+	var newMovieId int64
+	if rowsAffected != 0 {
+		//Movie not in db
+		newMovieId, err = res.LastInsertId()
+		if err != nil {
+			return err
+		}
+	} else {
+		//Movie already in movie db
+		newMovieId, err = s.GetMovie(movie.TmdbId)
+		if err != nil {
+			return err
+		}
 	}
 
 	_, err = s.db.Exec(`INSERT INTO list_movies (list_id, movie_id) VALUES (?, ?);`, listID, newMovieId)
