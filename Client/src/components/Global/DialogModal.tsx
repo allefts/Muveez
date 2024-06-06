@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useDebounce } from "../../utils/hooks/useDebounce";
 import SearchBar from "../Navbar/Search";
 import SearchList from "../Discover/SearchList";
+import { BsX } from "react-icons/bs";
 
 type DialogModalProps = {
   isOpen: string;
@@ -12,7 +13,7 @@ type DialogModalProps = {
 };
 
 const StyledDialog = styled.dialog`
-  padding: 0.5rem;
+  padding: 1rem;
   top: 50%;
   left: 50%;
   translate: -50% -50%;
@@ -29,8 +30,35 @@ const StyledDialog = styled.dialog`
     backdrop-filter: blur(1px);
   }
 
-  .modal_title {
-    text-align: center;
+  .modal_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .modal_title {
+      text-align: center;
+    }
+
+    .modal_close_btn {
+      height: 40px;
+      width: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      outline: none;
+      color: ${({ theme }) => theme.primary};
+      background: ${({ theme }) => theme.body};
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 50%;
+
+      transition: all 300ms ease;
+
+      &:hover {
+        background: ${({ theme }) => theme.background};
+      }
+    }
   }
 `;
 
@@ -49,7 +77,7 @@ const DialogModal = ({ isOpen, onClose }: DialogModalProps) => {
       dialogRef.current?.close();
       setSearchValue("");
     }
-  }, [isOpen]);
+  }, [isOpen, searchValue]);
 
   const closeModal = () => {
     setSearchValue("");
@@ -58,10 +86,14 @@ const DialogModal = ({ isOpen, onClose }: DialogModalProps) => {
 
   return (
     <StyledDialog ref={dialogRef} className="add_modal" onClose={closeModal}>
-      <h1 className="modal_title">Add Movies</h1>
+      <div className="modal_header">
+        <h1 className="modal_title">Add Movies</h1>
+        <button className="modal_close_btn" onClick={closeModal}>
+          <BsX size={24} />
+        </button>
+      </div>
       <SearchBar setSearchValue={setSearchValue} />
       <SearchList debouncedSearchValue={debouncedSearchValue} />
-      <button>Ok</button>
     </StyledDialog>
   );
 };

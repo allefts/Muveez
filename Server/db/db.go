@@ -73,7 +73,7 @@ func (s *SQLiteStorage) createMoviesTable() error {
 	_, err := s.db.Exec(
 		`CREATE TABLE IF NOT EXISTS movies (
 		movie_id INTEGER PRIMARY KEY AUTOINCREMENT,
-		tmdb_id INTEGER NOT NULL,
+		tmdb_id INTEGER NOT NULL UNIQUE,
 		title VARCHAR(255) NOT NULL,
 		overview VARCHAR(255) NOT NULL,
 		release_date VARCHAR(55),

@@ -29,6 +29,48 @@ func (s *ListsService) RegisterRoutes(r *chi.Mux, authHandler *auth.AuthHandler)
 	r.Get("/list/{id}", auth.RequireAuth(s.handleGetUserListWithMovies, authHandler))
 	r.Post("/list", auth.RequireAuth(s.handleCreateList, authHandler))
 	r.Delete("/list", auth.RequireAuth(s.handleDeleteList, authHandler))
+	r.Post("/list/{id}", auth.RequireAuth(s.handleAddMovieToList, authHandler))
+}
+
+func (s *ListsService) handleAddMovieToList(w http.ResponseWriter, r *http.Request) {
+	listId := chi.URLParam(r, "id")
+
+	var movieToAdd types.Movie
+	err := json.NewDecoder(r.Body).Decode(&movieToAdd)
+	if err != nil {
+		log.Info(err)
+		return
+	}
+
+	//Gets list with movies
+	listWMovies, err := s.store.GetUserListMovie(listId)
+	if err != nil {
+		log.Info(err)
+		return
+	}
+
+	//Check if movie already in list
+	movieAlreadyInList := false
+	for _, movie := range listWMovies.Movies {
+		if movie.TmdbId == movieToAdd.TmdbId {
+			movieAlreadyInList = true
+			break
+		}
+	}
+
+	if movieAlreadyInList {
+		utils.JSONResponse(w, "Movie already in list", http.StatusFound)
+		return
+	}
+
+	//Add movie to list
+	err = s.store.AddMovieToList(listId, movieToAdd)
+	if err != nil {
+		log.Info(err)
+		return
+	}
+
+	utils.JSONResponse(w, "Movie added", http.StatusCreated)
 }
 
 func (s *ListsService) handleDeleteList(w http.ResponseWriter, r *http.Request) {

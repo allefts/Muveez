@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toUser } from "./typeConversions";
-import { ListWithMovies } from "../types";
+import { FetchedMovie, ListWithMovies, Movie } from "../types";
 import useSWRImmutable from "swr/immutable";
 
 const serverAPI = axios.create({
@@ -64,6 +64,25 @@ const deleteListFetcher = async (
   return false;
 };
 
+const addMovieToListFetcher = async (url: string, movie: FetchedMovie) => {
+  const dbMovie = {
+    movie_id: 0,
+    tmdb_id: movie.tmdb_id,
+    title: movie.title,
+    overview: movie.overview,
+    image_url: movie.image_url,
+    release_date: movie.release_date,
+  } as Movie;
+
+  try {
+    const res = await serverAPI.post(url, {
+      ...dbMovie,
+    });
+  } catch (err) {
+    return false;
+  }
+};
+
 //HOOK to get current user
 const useUser = () => {
   const { data, isLoading, error } = useSWRImmutable("/user", serverFetcher);
@@ -104,6 +123,7 @@ const useAllUserListsWithMovies = () => {
 };
 
 export {
+  addMovieToListFetcher,
   deleteListFetcher,
   createListFetcher,
   useListWithMovies,

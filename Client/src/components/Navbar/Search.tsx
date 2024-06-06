@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { BsSearch } from "react-icons/bs";
 import { Dispatch, SetStateAction } from "react";
 
 const StyledSearchBar = styled.div`
@@ -10,36 +9,15 @@ const StyledSearchBar = styled.div`
   margin-bottom: 2rem;
 
   .search_inpt {
-    width: 350px;
+    flex-grow: 1;
+    max-width: 550px;
+    font-size: 1.25rem;
     outline: none;
     border: 2px solid ${({ theme }) => theme.text};
-    border-right: 0px;
-    border-radius: 0.5rem 0 0 0.5rem;
+    border-radius: 0.5rem;
     padding: 0.5rem 1rem;
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-  }
-
-  .search_btn {
-    outline: none;
-    border: 2px solid ${({ theme }) => theme.text};
-    border-left: 0px;
-    border-radius: 0 1rem 1rem 0;
-    padding: 0.6rem 1rem;
-    background: ${({ theme }) => theme.text};
-    cursor: pointer;
-
-    transition: all 300ms ease;
-    opacity: 0.8;
-
-    svg {
-      color: ${({ theme }) => theme.body};
-      stroke-width: 0.5px;
-    }
-
-    &:hover {
-      opacity: 1;
-    }
   }
 `;
 
@@ -57,12 +35,6 @@ const SearchBar = ({ setSearchValue }: SearchBarProps) => {
         placeholder="Bee Movie"
         autoFocus
       />
-      <button
-        style={{ display: "flex", alignItems: "center" }}
-        className="search_btn"
-      >
-        <BsSearch size={15.5} />
-      </button>
     </StyledSearchBar>
   );
 };

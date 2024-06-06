@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { FetchedMovie } from "../../utils/types";
 import { BsFillStarFill, BsPlus } from "react-icons/bs";
 import { useParams } from "react-router-dom";
+import { addMovieToListFetcher } from "../../utils/helpers/serverFetcher";
 
 type SearchItemProps = {
   movie: FetchedMovie;
@@ -85,7 +86,10 @@ const SearchItem = ({ movie }: SearchItemProps) => {
   //list id
   const { id } = useParams();
 
-  const addMovieToList = () => {};
+  const addMovieToList = () => {
+    const res = addMovieToListFetcher(`list/${id}`, movie);
+    console.log(res);
+  };
 
   return (
     <StyledSearchItem>

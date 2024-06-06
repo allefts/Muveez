@@ -195,7 +195,6 @@ func (s *Storage) GetUserMoviesFromList(listID int) ([]types.Movie, error) {
 	}
 	defer rows.Close()
 
-	// var movies []types.Movie
 	movies := []types.Movie{}
 	for rows.Next() {
 		var movie types.Movie
@@ -227,6 +226,29 @@ func (s *Storage) GetUserList(listID int) (types.List, error) {
 	}
 
 	return list, nil
+}
+
+func (s *Storage) AddMovieToList(listID string, movie types.Movie) error {
+	res, err := s.db.Exec(`
+	INSERT INTO movies (tmdb_id, title, overview, release_date, image_url) 
+	VALUES (?, ?, ?, ?, ?) 
+	ON CONFLICT (tmdb_id) DO NOTHING;`, movie.TmdbId, movie.Title, movie.Overview, movie.ReleaseDate, movie.ImageURL)
+
+	if err != nil {
+		return err
+	}
+
+	newMovieId, err := res.LastInsertId()
+	if err != nil {
+		return err
+	}
+
+	_, err = s.db.Exec(`INSERT INTO list_movies (list_id, movie_id) VALUES (?, ?);`, listID, newMovieId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // GET JUST ONE LIST WITH ALL ITS MOVIES AND ALL LIST INFORMATION
