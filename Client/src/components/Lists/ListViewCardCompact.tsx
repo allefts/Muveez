@@ -8,10 +8,23 @@ const StyledListViewCardCompact = styled.div<{ $bgImg: string }>`
   align-items: center;
   justify-content: space-between;
   //   background: ${({ theme }) => theme.background};
-  background: url(${({ $bgImg }) => $bgImg});
   background-size: cover;
   border-radius: 0.5rem;
   padding: 0.5rem;
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    background: url(${({ $bgImg }) => $bgImg});
+    border-radius: 0.5rem;
+    z-index: -1;
+  }
 
   .left_content {
     gap: 1rem;

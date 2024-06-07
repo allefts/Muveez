@@ -9,6 +9,10 @@ const StyledListPage = styled.section`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
+  @media (max-width: 500px) {
+    padding: 1rem;
+  }
 `;
 
 // type ListPageProps = {};

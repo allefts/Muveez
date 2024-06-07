@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 const StyledNavItems = styled.div`
   display: flex;
+  flex-flow: row wrap;
   align-items: center;
   gap: 2rem;
 

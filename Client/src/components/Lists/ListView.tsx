@@ -9,15 +9,20 @@ import DialogModal from "../Global/DialogModal";
 const StyledListView = styled.div`
   margin: 0 2rem;
 
+  @media (max-width: 500px) {
+    margin: 0;
+  }
+
   .list_metadata {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    // justify-content: center;
+    // align-items: space-between;
+    flex-direction: column;
     margin-bottom: 2rem;
   }
 
   .list_title {
-    text-align: center;
+    // text-align: center;
     font-size: 3rem;
   }
 `;
