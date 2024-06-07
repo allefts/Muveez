@@ -24,7 +24,7 @@ func main() {
 	cfg := config.InitConfig()
 
 	//DB SETUP
-	sqlStorage := db.NewSQLiteStorage(cfg)
+	sqlStorage := db.NewMySQLStorage(cfg)
 	db, err := sqlStorage.Init()
 	if err != nil {
 		log.Fatal(err)
@@ -35,7 +35,13 @@ func main() {
 	store := store.NewStore(db)
 
 	//SESSION SETUP
-	sessionStore := auth.NewCookieStore(auth.SessionOptions{CookieKey: cfg.SupaSecret, MaxAge: 60 * 60 * 24 * 2, HttpOnly: true, Secure: false})
+	sessionStore := auth.NewCookieStore(
+		auth.SessionOptions{
+			CookieKey: cfg.SupaSecret,
+			MaxAge:    60 * 60 * 24 * 2,
+			HttpOnly:  true,
+			Secure:    false,
+		})
 	authService := auth.NewAuthService(sessionStore)
 
 	//SERVER SETUP

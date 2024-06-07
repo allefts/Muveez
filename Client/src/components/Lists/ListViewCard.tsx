@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { Movie } from "../../utils/types";
 import { BsPlusLg } from "react-icons/bs";
-import { deleteListFetcher } from "../../utils/helpers/serverFetcher";
-import { useParams, useRevalidator } from "react-router-dom";
 
 const StyledListViewCard = styled.div`
   height: 100%;
@@ -76,26 +74,19 @@ const StyledListViewCard = styled.div`
 
 type ListViewCardProps = {
   movie: Movie;
+  handleDeleteMovieFromList: (movieId: number) => void;
 };
 
-const ListViewCard = ({ movie }: ListViewCardProps) => {
-  const listId = useParams()["id"];
-  const revalidator = useRevalidator();
-
-  const handleDeleteMovieFromList = async () => {
-    const res = await deleteListFetcher(
-      "/list",
-      parseInt(listId!),
-      movie.movie_id
-    );
-    if (res) {
-      revalidator.revalidate();
-    }
-  };
-
+const ListViewCard = ({
+  movie,
+  handleDeleteMovieFromList,
+}: ListViewCardProps) => {
   return (
     <StyledListViewCard>
-      <button className="delete_btn" onClick={handleDeleteMovieFromList}>
+      <button
+        className="delete_btn"
+        onClick={() => handleDeleteMovieFromList(movie.movie_id)}
+      >
         <BsPlusLg size={24} />
       </button>
       <div className="card_bg">

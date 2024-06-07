@@ -5,16 +5,15 @@ import (
 
 	"github.com/allefts/muveez_server/config"
 	"github.com/charmbracelet/log"
-
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type SQLiteStorage struct {
+type MySQLStorage struct {
 	db *sql.DB
 }
 
-func NewSQLiteStorage(cfg *config.Config) *SQLiteStorage {
-	db, err := sql.Open("sqlite3", cfg.DBName)
+func NewMySQLStorage(cfg *config.Config) *MySQLStorage {
+	db, err := sql.Open("mysql", cfg.DBCfg.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,12 +23,12 @@ func NewSQLiteStorage(cfg *config.Config) *SQLiteStorage {
 		log.Fatal(err)
 	}
 
-	log.Info("Connected to SQLite")
+	log.Info("Connected to MySQL")
 
-	return &SQLiteStorage{db: db}
+	return &MySQLStorage{db: db}
 }
 
-func (s *SQLiteStorage) Init() (*sql.DB, error) {
+func (s *MySQLStorage) Init() (*sql.DB, error) {
 
 	if err := s.createUsersTable(); err != nil {
 		return nil, err
@@ -50,11 +49,11 @@ func (s *SQLiteStorage) Init() (*sql.DB, error) {
 	return s.db, nil
 }
 
-// USERS
-func (s *SQLiteStorage) createUsersTable() error {
+// // USERS
+func (s *MySQLStorage) createUsersTable() error {
 	_, err := s.db.Exec(
 		`CREATE TABLE IF NOT EXISTS users (
-			user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			user_id INTEGER PRIMARY KEY AUTO_INCREMENT,
 			google_id VARCHAR(255) NOT NULL,
 			email VARCHAR(255) NOT NULL UNIQUE,
 			username VARCHAR(255) UNIQUE,
@@ -68,11 +67,11 @@ func (s *SQLiteStorage) createUsersTable() error {
 	return err
 }
 
-// MOVIES
-func (s *SQLiteStorage) createMoviesTable() error {
+// // MOVIES
+func (s *MySQLStorage) createMoviesTable() error {
 	_, err := s.db.Exec(
 		`CREATE TABLE IF NOT EXISTS movies (
-		movie_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		movie_id INTEGER PRIMARY KEY AUTO_INCREMENT,
 		tmdb_id INTEGER NOT NULL UNIQUE,
 		title VARCHAR(255) NOT NULL,
 		overview VARCHAR(255) NOT NULL,
@@ -84,11 +83,11 @@ func (s *SQLiteStorage) createMoviesTable() error {
 	return err
 }
 
-// LISTS
-func (s *SQLiteStorage) createListsTable() error {
+// // LISTS
+func (s *MySQLStorage) createListsTable() error {
 	_, err := s.db.Exec(
 		`CREATE TABLE IF NOT EXISTS lists (
-		list_id INTEGER PRIMARY KEY AUTOINCREMENT,
+		list_id INTEGER PRIMARY KEY AUTO_INCREMENT,
 		user_id INTEGER NOT NULL,
 		list_name VARCHAR(255) NOT NULL UNIQUE,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -98,13 +97,13 @@ func (s *SQLiteStorage) createListsTable() error {
 	return err
 }
 
-// LISTMOVIES
-func (s *SQLiteStorage) createListMoviesTable() error {
+// // LISTMOVIES
+func (s *MySQLStorage) createListMoviesTable() error {
 	_, err := s.db.Exec(
 		`CREATE TABLE IF NOT EXISTS list_movies (
 		list_id INTEGER NOT NULL,
 		movie_id INTEGER NOT NULL,
-		
+
 		FOREIGN KEY (list_id) REFERENCES lists(list_id) ON DELETE CASCADE,
 		FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
 		PRIMARY KEY (list_id, movie_id)

@@ -169,7 +169,7 @@ func (s *Storage) GetUserLists(userID int) ([]types.List, error) {
 
 	defer rows.Close()
 
-	var lists []types.List
+	lists := []types.List{}
 	for rows.Next() {
 		var list types.List
 		if err := rows.Scan(&list.ListID, &list.UserID, &list.ListName, &list.CreatedAt); err != nil {
@@ -252,9 +252,9 @@ func (s *Storage) GetUserList(listID int) (types.List, error) {
 
 func (s *Storage) AddMovieToList(listID string, movie types.Movie) error {
 	res, err := s.db.Exec(`
-	INSERT INTO movies (tmdb_id, title, overview, release_date, image_url) 
-	VALUES (?, ?, ?, ?, ?) 
-	ON CONFLICT (tmdb_id) DO NOTHING;`, movie.TmdbId, movie.Title, movie.Overview, movie.ReleaseDate, movie.ImageURL)
+	INSERT IGNORE INTO movies (tmdb_id, title, overview, release_date, image_url) 
+	VALUES (?, ?, ?, ?, ?)`,
+		movie.TmdbId, movie.Title, movie.Overview, movie.ReleaseDate, movie.ImageURL)
 
 	if err != nil {
 		return err

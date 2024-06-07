@@ -71,9 +71,14 @@ const StyledListViewCardCompact = styled.div<{ $bgImg: string }>`
 type ListViewCardCompactProps = {
   movie: Movie;
   idx: number;
+  handleDeleteMovieFromList: (movieId: number) => void;
 };
 
-const ListViewCardCompact = ({ movie, idx }: ListViewCardCompactProps) => {
+const ListViewCardCompact = ({
+  movie,
+  idx,
+  handleDeleteMovieFromList,
+}: ListViewCardCompactProps) => {
   return (
     <StyledListViewCardCompact $bgImg={movie.image_url}>
       <div className="left_content">
@@ -93,7 +98,10 @@ const ListViewCardCompact = ({ movie, idx }: ListViewCardCompactProps) => {
         </h5>
       </div>
       <div className="right_content">
-        <button className="delete_btn">
+        <button
+          className="delete_btn"
+          onClick={() => handleDeleteMovieFromList(movie.movie_id)}
+        >
           <BsX size={28} />
         </button>
       </div>

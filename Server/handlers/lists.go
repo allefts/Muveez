@@ -152,17 +152,13 @@ func (s *ListsService) handleGetUserListsWithMovies(w http.ResponseWriter, r *ht
 	lists, err := s.store.GetUserListsWithMovies(userID)
 	if err != nil {
 		log.Info(err)
+		utils.JSONResponse(w, types.Error{Message: "error getting user lists"}, http.StatusForbidden)
 		return
 	}
 
 	if len(lists) == 0 {
 		log.Info("User has no lists")
-		return
-	}
-
-	if err != nil {
-		log.Info(err)
-		utils.JSONResponse(w, types.Error{Message: "error getting user lists"}, http.StatusForbidden)
+		utils.JSONResponse(w, []types.ListsWithMovies{}, http.StatusOK)
 		return
 	}
 
