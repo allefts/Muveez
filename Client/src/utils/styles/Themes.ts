@@ -3,14 +3,14 @@ import { createGlobalStyle } from "styled-components";
 export const lightTheme = {
   body: "#edf2f4",
   text: "#1c1c1c",
-  primary: "#6bf178",
+  primary: "rgba(3, 102, 214, 1)",
   background: "#f8f9fa",
 };
 
 export const darkTheme = {
   body: "#1c1c1c",
   text: "#edf2f4",
-  primary: "#6bf178",
+  primary: "rgba(3, 102, 214, 1)",
   background: "#333333",
 };
 
