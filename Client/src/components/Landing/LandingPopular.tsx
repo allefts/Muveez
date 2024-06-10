@@ -1,21 +1,25 @@
 import styled from "styled-components";
-import { useLoaderData } from "react-router-dom";
 import { FetchedMovie } from "../../utils/types";
 import PopularMovieCard from "./PopularMovieCard";
 
 const StyledLandingPopularMovies = styled.div`
-  position: relative;
-  width: 100%;
-  height: 500px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
 `;
 
-const LandingPopularMovies = () => {
-  const movies = useLoaderData() as FetchedMovie[];
+type LandingMovieProps = {
+  movies: FetchedMovie[];
+};
 
+const LandingPopularMovies = ({ movies }: LandingMovieProps) => {
   const renderPopularMovies = () =>
-    movies
-      .slice(0, 10)
-      .map((movie, idx) => <PopularMovieCard movie={movie} key={idx} />);
+    movies.map((movie, idx) => (
+      <PopularMovieCard movie={movie} key={idx} idx={idx} />
+    ));
 
   return (
     <StyledLandingPopularMovies>

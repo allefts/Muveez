@@ -1,10 +1,7 @@
+import { FaGoogle } from "react-icons/fa";
 import styled from "styled-components";
 
 const StyledLandingHeader = styled.div`
-  max-width: 900px;
-  margin: 0 auto;
-  margin-top: 5rem;
-  margin-bottom: 5rem;
   text-align: center;
 
   h1 {
@@ -23,7 +20,37 @@ const StyledLandingHeader = styled.div`
   }
 `;
 
+const SubmitBtn = styled.button`
+  margin: 2rem auto 10rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  width: 200px;
+  background-color: ${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.body};
+  outline: none;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 300ms ease;
+  font-weight: bold;
+
+  svg {
+    margin-right: 1rem;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.primary};
+  }
+`;
+
 const LandingHeader = () => {
+  const handleLoginWithGoogle = async () => {
+    window.location.href = "http://localhost:8000/auth/google";
+  };
+
   return (
     <StyledLandingHeader>
       <h1>
@@ -33,6 +60,10 @@ const LandingHeader = () => {
         Think Spotify, but for films. Your tool to never forget what you've
         watched.
       </p>
+      <SubmitBtn onClick={handleLoginWithGoogle}>
+        <FaGoogle />
+        Log in with Google
+      </SubmitBtn>
     </StyledLandingHeader>
   );
 };

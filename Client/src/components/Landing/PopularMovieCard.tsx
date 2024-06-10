@@ -2,19 +2,17 @@ import styled from "styled-components";
 import { FetchedMovie } from "../../utils/types";
 
 const StyledPopularMovieCard = styled.div`
-  height: 100px;
-  width: 100px;
-  border-radius: 50%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  height: 175px;
+  width: 125px;
+  border-radius: 1rem;
 `;
 
 type CardProps = {
   movie: FetchedMovie;
+  idx: number;
 };
 
-const PopularMovieCard = ({ movie }: CardProps) => {
+const PopularMovieCard = ({ movie, idx }: CardProps) => {
   return (
     <StyledPopularMovieCard
       style={{
