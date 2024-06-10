@@ -31,16 +31,13 @@ const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
   if (user)
     return (
       <StyledNavItems>
-        <Link className="lists_link" to="/discover">
-          Discover
-        </Link>
         <Link className="lists_link" to="/lists">
           Lists
         </Link>
+        <ThemeSelector theme={theme} toggleTheme={toggleTheme} />
         <Link to="/profile">
           <img className="profile_image" src={user.avatar_url} />
         </Link>
-        <ThemeSelector theme={theme} toggleTheme={toggleTheme} />
       </StyledNavItems>
     );
 

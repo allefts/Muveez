@@ -100,6 +100,18 @@ func (s *ListsService) handleCreateList(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	//Check if user already has 10 lists
+	userLists, err := s.store.GetUserLists(userId)
+	if err != nil {
+		log.Info(err)
+		return
+	}
+
+	if len(userLists) == 10 {
+		utils.JSONResponse(w, "Lists amount reached", http.StatusConflict)
+		return
+	}
+
 	//Checks if the user already has a list with that name
 	listNameAlreadyUsed, err := s.store.CheckForList(userId, listName)
 	if listNameAlreadyUsed {

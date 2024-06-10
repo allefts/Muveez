@@ -49,7 +49,7 @@ const parseMoviesFromTMDB = (movies: any[]) => {
   const moviesInfo: FetchedMovie[] = [];
   //Only add movie if there is a poster image
   movies.forEach((movie) => {
-    if (movie.poster_path) {
+    if (movie.poster_path && Math.floor(movie.popularity) > 0) {
       moviesInfo.push({
         image_url: `https://image.tmdb.org/t/p/original${movie.poster_path}`,
         title: movie.title,

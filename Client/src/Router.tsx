@@ -10,7 +10,6 @@ import ListView from "./components/Lists/ListView";
 import ListsContent from "./components/Lists/ListsContent";
 import { serverFetcher } from "./utils/helpers/serverFetcher";
 import ListsHeader from "./components/Lists/ListsHeader";
-import DiscoverPage from "./pages/Discover";
 import { getPopularMovies } from "./utils/helpers/movieFetcher";
 
 export const Router = createBrowserRouter([
@@ -20,18 +19,13 @@ export const Router = createBrowserRouter([
       {
         path: "/",
         element: <LandingPage />,
+        loader: async () => {
+          return getPopularMovies();
+        },
       },
       {
         path: "/login",
         element: <LoginPage />,
-      },
-      {
-        path: "/discover",
-        element: <DiscoverPage />,
-        loader: async () => {
-          return await getPopularMovies();
-        },
-        errorElement: <ErrorPage />,
       },
       {
         element: <ProtectedPage />,

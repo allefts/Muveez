@@ -16,8 +16,6 @@ const StyledNewListCard = styled.div`
   color: ${({ theme }) => theme.primary};
 
   transition: all 300ms ease;
-  // filter: brightness(0.6);
-
   svg {
     transition: all 300ms ease;
   }

@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import LandingHeader from "../components/Landing/LandingHeader";
+import LandingPopularMovies from "../components/Landing/LandingPopular";
 
 const StyledLandingPage = styled.section`
   padding: 0 2rem;
@@ -7,7 +9,8 @@ const StyledLandingPage = styled.section`
 const LandingPage = () => {
   return (
     <StyledLandingPage>
-      <h1>Home Page</h1>
+      <LandingHeader />
+      <LandingPopularMovies />
     </StyledLandingPage>
   );
 };

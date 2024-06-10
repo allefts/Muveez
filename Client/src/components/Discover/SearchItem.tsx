@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { FetchedMovie } from "../../utils/types";
 import { BsFillStarFill, BsPlus } from "react-icons/bs";
-import { useParams, useRevalidator } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { addMovieToListFetcher } from "../../utils/helpers/serverFetcher";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 type SearchItemProps = {
   movie: FetchedMovie;
@@ -86,33 +85,34 @@ const StyledSearchItem = styled.div`
 const SearchItem = ({ movie }: SearchItemProps) => {
   //list id
   const { id } = useParams();
-  const revalidator = useRevalidator();
 
   const addMovieToList = async () => {
     const res = await addMovieToListFetcher(`list/${id}`, movie);
     if (res) {
-      revalidator.revalidate();
+      //Success
+      return;
     }
+    console.log("Error adding movie to list");
   };
 
   return (
     <StyledSearchItem>
-      <LazyLoadImage
+      <img
         width={85}
         height={125}
-        effect="blur"
         src={
           movie.image_url
             ? movie.image_url
             : "https://subscoop.com/asset/placeholder.jpg"
         }
         alt="Movie Poster"
+        loading="lazy"
       />
       <div className="movie_information">
         <div className="movie_metadata">
           <div className="movie_title">
             <h3>{movie.title}</h3>
-            <p>{movie.release_date.split("-")[0]}</p>
+            <p>{movie.release_date ?? " "}</p>
           </div>
           <div className="movie_popularity">
             <BsFillStarFill />

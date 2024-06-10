@@ -69,10 +69,13 @@ const NewListForm = ({
   const handleCreateList = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const res = await createListFetcher("/list", newListName);
-    setError(res);
-    //refreshes data across app
-    mutate("/user/lists");
-    setMode(Mode.DEFAULT);
+    if (res) {
+      setError(res);
+    } else {
+      //refreshes data across app
+      mutate("/user/lists");
+      setMode(Mode.DEFAULT);
+    }
   };
 
   return (

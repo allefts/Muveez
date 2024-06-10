@@ -13,12 +13,6 @@ const serverAPI = axios.create({
 const serverFetcher = (url: string) =>
   serverAPI.get(url).then((res) => res.data);
 
-// const routerLoaderFetcher = <T>(url: string, params?: Params<string>) => {
-//   if (params) {
-//     const res = serverFetcher(`${url}` + params);
-//   }
-// };
-
 const createListFetcher = async (url: string, listName: string | undefined) => {
   const wah = localStorage.getItem("wah");
   if (wah && listName) {
@@ -26,18 +20,17 @@ const createListFetcher = async (url: string, listName: string | undefined) => {
     form.append("user_id", wah);
     form.append("list_name", listName);
     try {
-      const res = await serverAPI.post(url, form).then((res) => res.data);
-      if (res.status === 200) {
+      const res = await serverAPI.post(url, form).then((res) => res);
+      if (res.status === 201) {
+        //List Created
         return "";
+      } else {
+        return res.data;
       }
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.log(err);
       if (err.response.status === 409) {
-        return "List already exists";
-      } else {
-        return "Error creating list";
+        return err.response.data;
       }
     }
   }

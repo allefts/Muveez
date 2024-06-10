@@ -3,6 +3,7 @@ import styled from "styled-components";
 const StyledListsHeader = styled.div`
   text-align: center;
   pointer-events: none;
+  margin-bottom: 2rem;
 
   h1 {
     font-size: 3rem;

@@ -40,7 +40,7 @@ func main() {
 			CookieKey: cfg.SupaSecret,
 			MaxAge:    60 * 60 * 24 * 2,
 			HttpOnly:  true,
-			Secure:    false,
+			Secure:    true,
 		})
 	authService := auth.NewAuthService(sessionStore)
 
