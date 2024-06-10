@@ -41,11 +41,7 @@ const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
       </StyledNavItems>
     );
 
-  return (
-    <Link className="lists_link" to="/login">
-      Login
-    </Link>
-  );
+  return <ThemeSelector theme={theme} toggleTheme={toggleTheme} />;
 };
 
 const StyledThemeSelector = styled.div`
