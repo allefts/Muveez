@@ -30,7 +30,7 @@ const SubmitBtn = styled.button`
   background-color: ${({ theme }) => theme.text};
   color: ${({ theme }) => theme.body};
   outline: none;
-  border: none;
+  border: 1px solid ${({ theme }) => theme.body};
   border-radius: 2rem;
   cursor: pointer;
   font-size: 1rem;

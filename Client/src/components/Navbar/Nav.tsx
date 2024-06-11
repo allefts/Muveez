@@ -3,9 +3,11 @@ import NavItems from "./NavItems";
 import { Link } from "react-router-dom";
 
 const StyledNav = styled.nav`
+  background: ${({ theme }) => theme.body};
   position: fixed;
   width: 100%;
   top: 0;
+  z-index: 10;
 
   display: flex;
   flex-flow: row wrap;
@@ -16,6 +18,11 @@ const StyledNav = styled.nav`
 
   .home_link {
     font-size: 2rem;
+    transition: all 300ms ease;
+
+    &:hover {
+      color: ${({ theme }) => theme.primary};
+    }
   }
 `;
 
