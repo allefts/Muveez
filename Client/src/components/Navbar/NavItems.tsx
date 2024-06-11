@@ -11,7 +11,17 @@ const StyledNavItems = styled.div`
 
   .lists_link {
     font-size: 1.25rem;
-    margin-bottom: 5.39px;
+    transition: all 300ms ease;
+
+    &:hover {
+      color: ${({ theme }) => theme.primary};
+    }
+  }
+
+  div {
+    @media (max-width: 464px) {
+      display: none;
+    }
   }
 
   .profile_image {

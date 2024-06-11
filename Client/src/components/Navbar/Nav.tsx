@@ -6,11 +6,15 @@ const StyledNav = styled.nav`
   width: 100%;
 
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
   justify-content: space-between;
   align-items: center;
 
   padding: 1rem 2rem;
+
+  @media (max-width: 464px) {
+    padding: 1rem;
+  }
 
   .home_link {
     font-size: 2rem;
