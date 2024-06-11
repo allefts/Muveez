@@ -41,7 +41,7 @@ const StyledListViewSelector = styled.div<{ $listStyle: string }>`
 
     .compact_btn {
       background: ${({ theme, $listStyle }) =>
-        $listStyle === "comp" ? theme.background : "transparent"};
+        $listStyle === "compact" ? theme.background : "transparent"};
     }
 
     .fancy_btn,

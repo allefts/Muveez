@@ -3,11 +3,7 @@ import NavItems from "./NavItems";
 import { Link } from "react-router-dom";
 
 const StyledNav = styled.nav`
-  background: ${({ theme }) => theme.body};
-  position: fixed;
   width: 100%;
-  top: 0;
-  z-index: 10;
 
   display: flex;
   flex-flow: row wrap;
