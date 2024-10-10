@@ -2,6 +2,7 @@ import styled from "styled-components";
 import NewListCard from "./NewListCard";
 import { useAllUserListsWithMovies } from "../../utils/helpers/serverFetcher";
 import ListCard from "./ListCard";
+import Spinner from "../Global/Spinner";
 
 const StyledListsContents = styled.div`
   width: 100%;
@@ -22,7 +23,7 @@ const ListsContent = () => {
   const { lists, isLoading, isError } = useAllUserListsWithMovies();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner size={50} color="#4a90e2" />;
   }
 
   if (isError) {

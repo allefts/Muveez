@@ -1,10 +1,15 @@
-import { useLoaderData, useSearchParams } from "react-router-dom";
+import {
+  useLoaderData,
+  useRevalidator,
+  useSearchParams,
+} from "react-router-dom";
 import styled from "styled-components";
-import { ListWithMovies } from "../../utils/types";
+import { FetchedMovie, ListWithMovies } from "../../utils/types";
 import ListViewMoviesContainer from "./ListViewMoviesContainer";
 import { toWrittenDate } from "../../utils/helpers/toDate";
 import ListViewSelector from "./ListViewSelector";
 import DialogModal from "../Global/DialogModal";
+import { addMovieToListFetcher } from "../../utils/helpers/serverFetcher";
 
 const StyledListView = styled.div`
   margin: 0 2rem;
@@ -31,11 +36,13 @@ const StyledListView = styled.div`
 
 const ListView = () => {
   const { list, movies } = useLoaderData() as ListWithMovies;
+  const revalidator = useRevalidator();
   //Start a new search param with dia set to no
   const [searchParams, setSearchParams] = useSearchParams({
     dia: "n",
     sort: "compact",
   });
+
   //Get dia
   const modalOpen = searchParams.get("dia")!;
   const listStyle = searchParams.get("sort")!;
@@ -84,9 +91,25 @@ const ListView = () => {
     );
   };
 
+  //Adds movie to list
+  const addMovieToList = async (id: string, movie: FetchedMovie) => {
+    const res = await addMovieToListFetcher(`list/${id}`, movie);
+    if (res) {
+      //Success and update list
+      revalidator.revalidate();
+      return;
+    }
+    console.log("Error adding movie to list");
+  };
+
   return (
     <StyledListView>
-      <DialogModal onClose={onClose} children={undefined} isOpen={modalOpen} />
+      <DialogModal
+        onClose={onClose}
+        children={undefined}
+        isOpen={modalOpen}
+        addMovieToList={addMovieToList}
+      />
       <div className="list_metadata">
         <h1 className="list_title">{list.list_name}</h1>
         <div>

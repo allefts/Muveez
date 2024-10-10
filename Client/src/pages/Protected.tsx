@@ -1,3 +1,4 @@
+import Spinner from "../components/Global/Spinner";
 import { useUser } from "../utils/helpers/serverFetcher";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -5,7 +6,7 @@ const ProtectedPage = () => {
   const { user, isLoading, isError } = useUser();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner size={50} color="#4a90e2" />;
   }
 
   if ((!isLoading && !user) || isError) {

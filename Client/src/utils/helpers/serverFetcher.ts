@@ -84,10 +84,13 @@ const addMovieToListFetcher = async (url: string, movie: FetchedMovie) => {
 
 //HOOK to get current user
 const useUser = () => {
-  const { data, isLoading, error } = useSWRImmutable("/user", serverFetcher);
+  const { data, isLoading, error, mutate } = useSWRImmutable(
+    "/user",
+    serverFetcher
+  );
 
   if (data) {
-    return { user: toUser(data), isLoading, isError: error };
+    return { user: toUser(data), isLoading, isError: error, mutate };
   }
 
   return {

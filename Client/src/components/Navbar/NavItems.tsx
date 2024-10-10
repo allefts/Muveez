@@ -1,7 +1,7 @@
 import { BsBrightnessHigh, BsMoon } from "react-icons/bs";
 import styled from "styled-components";
-import { useUser } from "../../utils/helpers/serverFetcher";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../utils/hooks/useAuth";
 
 const StyledNavItems = styled.div`
   display: flex;
@@ -36,7 +36,8 @@ type NavItemProps = {
 };
 
 const NavItems = ({ theme, toggleTheme }: NavItemProps) => {
-  const { user } = useUser();
+  // const { user } = useUser();
+  const { user } = useAuth();
 
   if (user)
     return (

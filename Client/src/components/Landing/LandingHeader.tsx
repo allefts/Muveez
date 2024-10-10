@@ -1,8 +1,10 @@
 import { FaGoogle } from "react-icons/fa";
 import styled from "styled-components";
+import { useAuth } from "../../utils/hooks/useAuth";
 
 const StyledLandingHeader = styled.div`
   text-align: center;
+  margin-bottom: 4rem;
 
   h1 {
     font-size: 3rem;
@@ -21,7 +23,7 @@ const StyledLandingHeader = styled.div`
 `;
 
 const SubmitBtn = styled.button`
-  margin: 2rem auto 10rem auto;
+  margin: 2rem auto 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,8 +50,23 @@ const SubmitBtn = styled.button`
 `;
 
 const LandingHeader = () => {
+  const { user } = useAuth();
+
   const handleLoginWithGoogle = async () => {
     window.location.href = "http://localhost:8000/auth/google";
+  };
+
+  const authStateLanding = () => {
+    if (!user) {
+      return (
+        <SubmitBtn onClick={handleLoginWithGoogle}>
+          <FaGoogle />
+          Log in with Google
+        </SubmitBtn>
+      );
+    } else {
+      return "";
+    }
   };
 
   return (
@@ -61,10 +78,7 @@ const LandingHeader = () => {
         Think Spotify, but for films. Your tool to never forget what you've
         watched.
       </p>
-      <SubmitBtn onClick={handleLoginWithGoogle}>
-        <FaGoogle />
-        Log in with Google
-      </SubmitBtn>
+      {authStateLanding()}
     </StyledLandingHeader>
   );
 };

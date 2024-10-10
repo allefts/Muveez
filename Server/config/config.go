@@ -20,7 +20,7 @@ func InitConfig() *Config {
 		DBCfg: mysql.Config{
 			User:      getEnv("DB_USER", "root"),
 			Passwd:    getEnv("DB_PASS", "password"),
-			DBName:    getEnv("DB_NAME", "muveez"),
+			DBName:    getEnv("DB_NAME", "MUVEEZ_DB"),
 			Net:       "tcp",
 			Addr:      "127.0.0.1:3306",
 			ParseTime: true,

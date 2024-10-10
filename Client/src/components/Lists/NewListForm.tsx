@@ -42,12 +42,14 @@ const StyledNewListForm = styled.div`
   }
 
   .submit_btn {
-    padding: 5px 10px;
+    padding: 0.25rem;
+    font-size: 1.5rem;
+    color: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme.primary};
     outline: none;
     border: none;
     cursor: pointer;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
 
     filter: brightness(0.8);
     transition: all 300ms ease;

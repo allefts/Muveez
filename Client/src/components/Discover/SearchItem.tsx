@@ -2,11 +2,6 @@ import styled from "styled-components";
 import { FetchedMovie } from "../../utils/types";
 import { BsFillStarFill, BsPlus } from "react-icons/bs";
 import { useParams } from "react-router-dom";
-import { addMovieToListFetcher } from "../../utils/helpers/serverFetcher";
-
-type SearchItemProps = {
-  movie: FetchedMovie;
-};
 
 const StyledSearchItem = styled.div`
   display: flex;
@@ -82,18 +77,14 @@ const StyledSearchItem = styled.div`
   }
 `;
 
-const SearchItem = ({ movie }: SearchItemProps) => {
+type SearchItemProps = {
+  movie: FetchedMovie;
+  addMovieToList: (id: string, movie: FetchedMovie) => Promise<void>;
+};
+
+const SearchItem = ({ movie, addMovieToList }: SearchItemProps) => {
   //list id
   const { id } = useParams();
-
-  const addMovieToList = async () => {
-    const res = await addMovieToListFetcher(`list/${id}`, movie);
-    if (res) {
-      //Success
-      return;
-    }
-    console.log("Error adding movie to list");
-  };
 
   return (
     <StyledSearchItem>
@@ -121,7 +112,12 @@ const SearchItem = ({ movie }: SearchItemProps) => {
         </div>
         <p className="movie_overview">{movie.overview}</p>
       </div>
-      <button className="add_movie_btn" onClick={addMovieToList}>
+      <button
+        className="add_movie_btn"
+        onClick={() => {
+          addMovieToList(id ?? "no_list_id", movie);
+        }}
+      >
         <BsPlus size={40} />
       </button>
     </StyledSearchItem>

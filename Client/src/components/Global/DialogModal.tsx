@@ -4,11 +4,13 @@ import { useDebounce } from "../../utils/hooks/useDebounce";
 import SearchBar from "../Navbar/Search";
 import SearchList from "../Discover/SearchList";
 import { BsX } from "react-icons/bs";
+import { FetchedMovie } from "../../utils/types";
 
 type DialogModalProps = {
   isOpen: string;
   onClose: () => void;
   children: React.ReactNode;
+  addMovieToList: (id: string, movie: FetchedMovie) => Promise<void>;
 };
 
 const StyledDialog = styled.dialog`
@@ -61,7 +63,7 @@ const StyledDialog = styled.dialog`
   }
 `;
 
-const DialogModal = ({ isOpen, onClose }: DialogModalProps) => {
+const DialogModal = ({ isOpen, onClose, addMovieToList }: DialogModalProps) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const debouncedSearchValue = useDebounce(searchValue);
 
@@ -92,7 +94,10 @@ const DialogModal = ({ isOpen, onClose }: DialogModalProps) => {
         </button>
       </div>
       <SearchBar setSearchValue={setSearchValue} />
-      <SearchList debouncedSearchValue={debouncedSearchValue} />
+      <SearchList
+        debouncedSearchValue={debouncedSearchValue}
+        addMovieToList={addMovieToList}
+      />
     </StyledDialog>
   );
 };
