@@ -53,7 +53,7 @@ const LandingHeader = () => {
   const { user } = useAuth();
 
   const handleLoginWithGoogle = async () => {
-    window.location.href = "http://localhost:8000/auth/google";
+    window.location.href = "https://api.muveez.pro/auth/google";
   };
 
   const authStateLanding = () => {

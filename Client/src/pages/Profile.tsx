@@ -1,14 +1,18 @@
 import styled from "styled-components";
-import EditForm from "../components/Profile/EditForm";
 import { useUser } from "../utils/helpers/serverFetcher";
-import { useState } from "react";
+// import EditForm from "../components/Profile/EditForm";
+// import { useState } from "react";
 
 const StyledProfilePage = styled.section`
-  margin-top: 5rem;
-  padding: 0 2rem;
+  height: 50vh;
 
-  display: grid;
-  place-items: center;
+  div {
+    margin-top: 5rem;
+    padding: 0 2rem;
+
+    display: grid;
+    place-items: center;
+  }
 `;
 
 const StyledUserInfo = styled.div`
@@ -28,21 +32,21 @@ const StyledUserInfo = styled.div`
 
 const ProfilePage = () => {
   const { user } = useUser();
-  const [username, setUsername] = useState(user?.username);
+  // const [username, setUsername] = useState(user?.username);
 
-  const handleUpdateUsername = () => {
-    //Send Request to update username
-    console.log(username);
-  };
+  // const handleUpdateUsername = () => {
+  //   //Send Request to update username
+  //   console.log(username);
+  // };
 
   return (
     <StyledProfilePage>
       <StyledUserInfo>
         <img src={user?.avatar_url} alt="Profile" />
         <h3>{user?.email}</h3>
-        <h3>{user?.created_at}</h3>
+        {/* <h3>{user?.created_at}</h3> */}
       </StyledUserInfo>
-      <EditForm>
+      {/* <EditForm>
         <label htmlFor="username"></label>
         <input
           type="text"
@@ -57,7 +61,7 @@ const ProfilePage = () => {
             }
           }}
         />
-      </EditForm>
+      </EditForm> */}
     </StyledProfilePage>
   );
 };

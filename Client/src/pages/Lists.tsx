@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Outlet } from "react-router-dom";
 
 const StyledListPage = styled.section`
+  min-height: 60vh;
   max-width: 1600px;
   margin: 0 auto;
 

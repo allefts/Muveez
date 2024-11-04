@@ -30,7 +30,8 @@ type AuthHandler struct {
 func NewAuthService(store *sessions.CookieStore) *AuthService {
 	gothic.Store = store
 	cfg := config.InitConfig()
-	goth.UseProviders(google.New(cfg.GoogleClientId, cfg.GoogleClientSecret, "http://localhost:8000/auth/google/callback", "email", "profile"))
+	// goth.UseProviders(google.New(cfg.GoogleClientId, cfg.GoogleClientSecret, "http://localhost:8000/auth/google/callback", "email", "profile"))
+	goth.UseProviders(google.New(cfg.GoogleClientId, cfg.GoogleClientSecret, "https://api.muveez.pro/auth/google/callback", "email", "profile"))
 
 	return &AuthService{}
 }
@@ -79,7 +80,8 @@ func (s *AuthHandler) handleCallbackLogin(w http.ResponseWriter, r *http.Request
 	}
 
 	//Redirect
-	w.Header().Set("Location", "http://localhost:5173")
+	// w.Header().Set("Location", "http://localhost:4173")
+	w.Header().Set("Location", "https://muveez.pro/lists")
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 
@@ -91,7 +93,8 @@ func (s *AuthHandler) handleLogout(w http.ResponseWriter, r *http.Request) {
 	gothic.Logout(w, r)
 
 	//Redirect
-	w.Header().Set("Location", "http://localhost:5173")
+	// w.Header().Set("Location", "http://localhost:4173")
+	w.Header().Set("Location", "https://muveez.pro/lists")
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 

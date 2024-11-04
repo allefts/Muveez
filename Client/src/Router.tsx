@@ -3,7 +3,6 @@ import LandingPage from "./pages/Landing";
 import ProfilePage from "./pages/Profile";
 import ListPage from "./pages/Lists";
 import ErrorPage from "./pages/Error";
-import LoginPage from "./pages/Login";
 import Layout from "./pages/Layout";
 import ProtectedPage from "./pages/Protected";
 import ListView from "./components/Lists/ListView";
@@ -22,10 +21,6 @@ export const Router = createBrowserRouter([
         loader: async () => {
           return getPopularMovies();
         },
-      },
-      {
-        path: "/login",
-        element: <LoginPage />,
       },
       {
         element: <ProtectedPage />,

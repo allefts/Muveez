@@ -16,6 +16,5 @@ func NewCookieStore(opts SessionOptions) *sessions.CookieStore {
 	store.Options.Path = "/"
 	store.Options.HttpOnly = opts.HttpOnly
 	store.Options.Secure = opts.Secure
-
 	return store
 }

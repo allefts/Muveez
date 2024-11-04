@@ -4,7 +4,8 @@ import { FetchedMovie, ListWithMovies, Movie } from "../types";
 import useSWRImmutable from "swr/immutable";
 
 const serverAPI = axios.create({
-  baseURL: "http://localhost:8000",
+  // baseURL: "http://localhost:8000",
+  baseURL: "https://api.muveez.pro",
   responseType: "json",
   responseEncoding: "utf8",
   withCredentials: true,
