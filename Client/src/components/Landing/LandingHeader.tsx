@@ -1,6 +1,6 @@
-import { FaGoogle } from "react-icons/fa";
 import styled from "styled-components";
 import { useAuth } from "../../utils/hooks/useAuth";
+import { FcGoogle } from "react-icons/fc";
 
 const StyledLandingHeader = styled.div`
   text-align: center;
@@ -28,20 +28,20 @@ const SubmitBtn = styled.button`
   align-items: center;
   justify-content: center;
   padding: 0.5rem;
-  width: 200px;
+  width: 150px;
   background-color: ${({ theme }) => theme.text};
   // color: ${({ theme }) => theme.body};
-  color: red;
   outline: none;
   border: 1px solid ${({ theme }) => theme.body};
   border-radius: 2rem;
   cursor: pointer;
   font-size: 1rem;
   transition: all 300ms ease;
-  font-weight: bold;
+  font-weight: 600;
 
   svg {
     margin-right: 1rem;
+    font-size: 2rem;
   }
 
   &:hover {
@@ -60,8 +60,8 @@ const LandingHeader = () => {
     if (!user) {
       return (
         <SubmitBtn onClick={handleLoginWithGoogle}>
-          <FaGoogle />
-          Log in with Google
+          <FcGoogle />
+          Login
         </SubmitBtn>
       );
     } else {
